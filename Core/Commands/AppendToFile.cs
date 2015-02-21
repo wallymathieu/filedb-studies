@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ProtoBuf.ServiceModel;
+﻿using System.Collections.Generic;
 using ProtoBuf;
 using System.IO;
-using ProtoBuf.Meta;
 
-namespace SomeBasicFileStoreApp.Core
+namespace SomeBasicFileStoreApp.Core.Commands
 {
 	public class AppendToFile : Model
 	{

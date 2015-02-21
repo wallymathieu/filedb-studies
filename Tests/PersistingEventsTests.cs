@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using SomeBasicFileStoreApp.Core;
 using System.Linq;
+using SomeBasicFileStoreApp.Core.Commands;
 
 namespace SomeBasicFileStoreApp.Tests
 {

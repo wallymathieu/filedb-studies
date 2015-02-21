@@ -42,20 +42,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppendToFile.cs" />
-    <Compile Include="Command.cs" />
-    <Compile Include="Customer.cs" />
-    <Compile Include="ICommandHandler.cs" />
-    <Compile Include="IRepository.cs" />
-    <Compile Include="Order.cs" />
-    <Compile Include="Product.cs" />
+    <Compile Include="Commands\AddCustomerCommand.cs" />
+    <Compile Include="Commands\AddCustomerCommandHandler.cs" />
+    <Compile Include="Commands\AddOrderCommand.cs" />
+    <Compile Include="Commands\AddOrderCommandHandler.cs" />
+    <Compile Include="Commands\AddProductCommand.cs" />
+    <Compile Include="Commands\AddProductCommandHandler.cs" />
+    <Compile Include="Commands\AppendToFile.cs" />
+    <Compile Include="Commands\Command.cs" />
+    <Compile Include="Domain\Customer.cs" />
+    <Compile Include="Commands\ICommandHandler.cs" />
+    <Compile Include="Domain\IRepository.cs" />
+    <Compile Include="Domain\Order.cs" />
+    <Compile Include="Domain\Product.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Models.cs" />
-    <Compile Include="Repository.cs" />
+    <Compile Include="Commands\Models.cs" />
+    <Compile Include="Domain\Repository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

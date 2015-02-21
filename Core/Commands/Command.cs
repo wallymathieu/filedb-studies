@@ -1,6 +1,6 @@
 ﻿using ProtoBuf;
 
-namespace SomeBasicFileStoreApp.Core
+namespace SomeBasicFileStoreApp.Core.Commands
 {
 	[ProtoContract]
 	[ProtoInclude(1, typeof(AddCustomerCommand))]

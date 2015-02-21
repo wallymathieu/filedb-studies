@@ -14,6 +14,5 @@ namespace SomeBasicFileStoreApp.Core
 		public virtual IList<Product> Products { get; set; }
 
 		public virtual int Version { get; set; }
-		public string EventId { get { return "Order_" + Id; } }
 	}
 }

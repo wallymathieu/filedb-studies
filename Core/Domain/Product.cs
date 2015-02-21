@@ -1,8 +1,4 @@
-﻿using ProtoBuf;
-using System;
-using System.Collections.Generic;
-
-namespace SomeBasicFileStoreApp.Core
+﻿namespace SomeBasicFileStoreApp.Core
 {
 	public class Product 
     {
@@ -13,6 +9,5 @@ namespace SomeBasicFileStoreApp.Core
 		public virtual string Name { get; set; }
 
 		public virtual int Version { get; set; }
-		public string EventId { get { return "Product_" + Id; } }
 	}
 }

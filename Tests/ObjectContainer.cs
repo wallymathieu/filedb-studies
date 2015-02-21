@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using SomeBasicFileStoreApp.Core;
+using SomeBasicFileStoreApp.Core.Commands;
 
 namespace SomeBasicFileStoreApp.Tests
 {
