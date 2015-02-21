@@ -23,7 +23,16 @@ namespace SomeBasicFileStoreApp.Tests
 		{
 			Assert.IsNotNull(_repository.GetProduct(1));
 		}
-
+		[Test]
+		public void OrderContainsProduct()
+		{
+			Assert.True(_repository.GetOrder(1).Products.Any(p => p.Id == 1));
+		}
+		[Test]
+		public void OrderHasACustomer()
+		{
+			Assert.IsNotNullOrEmpty(_repository.GetTheCustomerOrder(1).Firstname);
+		}
 		[TestFixtureSetUp]
 		public void TestFixtureSetup()
 		{

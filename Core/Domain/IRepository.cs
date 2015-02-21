@@ -11,5 +11,7 @@ namespace SomeBasicFileStoreApp.Core
 		void Save(Product obj);
 		void Save(Order obj);
 		void Save(Customer obj);
+		Order GetOrder(int v);
+		Customer GetTheCustomerOrder(int v);
 	}
 }

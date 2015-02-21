@@ -11,11 +11,12 @@ namespace SomeBasicFileStoreApp.Tests
 		private readonly IRepository _repository = new Repository();
 		public ObjectContainer()
 		{
-			handlers = new ICommandHandler[] {
+			handlers =  new ICommandHandler[] {
 				new AddCustomerCommandHandler(_repository),
 				new AddOrderCommandHandler(_repository),
-				new AddProductCommandHandler(_repository)
-			};
+				new AddProductCommandHandler(_repository),
+				new AddProductToOrderHandler(_repository)
+            };
         }
 		public IRepository GetRepository()
 		{

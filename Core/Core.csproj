@@ -48,6 +48,8 @@
     <Compile Include="Commands\AddOrderCommandHandler.cs" />
     <Compile Include="Commands\AddProductCommand.cs" />
     <Compile Include="Commands\AddProductCommandHandler.cs" />
+    <Compile Include="Commands\AddProductToOrder.cs" />
+    <Compile Include="Commands\AddProductToOrderHandler.cs" />
     <Compile Include="Commands\AppendToFile.cs" />
     <Compile Include="Commands\Command.cs" />
     <Compile Include="Domain\Customer.cs" />
