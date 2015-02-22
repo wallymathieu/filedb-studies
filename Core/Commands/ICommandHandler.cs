@@ -1,4 +1,7 @@
-﻿namespace SomeBasicFileStoreApp.Core
+﻿using System;
+using System.Linq;
+
+namespace SomeBasicFileStoreApp.Core
 {
 	public interface ICommandHandler<T> : ICommandHandler
 	{
@@ -26,5 +29,14 @@
 			var chandler = typeof(ICommandHandler<>).MakeGenericType(command.GetType());
 			return chandler.IsInstanceOfType(self);
 		}
+		public static Type[] GetCommandTypes(this ICommandHandler self)
+		{
+			var g = typeof(ICommandHandler<>);
+			var interfaces = self.GetType().GetInterfaces().Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == g);
+			return interfaces
+				.Select(i => i.GetGenericArguments().Single())
+				.ToArray();
+		}
+
 	}
 }
