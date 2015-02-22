@@ -16,8 +16,8 @@ namespace SomeBasicFileStoreApp.Tests
 		public IEnumerable<Command> Get()
 		{
 			var commands = new List<Command>();
-			var doc = XDocument.Load(Path.Combine("TestData", "TestData.xml"));
-            XmlImport.Parse(doc, new[] { typeof(Customer), typeof(Order), typeof(Product) },
+			var import = new XmlImport(XDocument.Load(Path.Combine("TestData", "TestData.xml")), "http://tempuri.org/Database.xsd");
+			import.Parse(new[] { typeof(Customer), typeof(Order), typeof(Product) },
 							(type, obj) =>
 							{
 								if (obj is Customer)
@@ -32,10 +32,14 @@ namespace SomeBasicFileStoreApp.Tests
 								{
 									commands.Add(new AddOrderCommand { Object = (Order)obj });
 								}
-							}, "http://tempuri.org/Database.xsd");
-			XmlImport.ParseConnections(doc, "OrderProduct", "Product", "Order", (productId, orderId) => {
-				commands.Add(new AddProductToOrder { ProductId = productId, OrderId = orderId});
-			}, "http://tempuri.org/Database.xsd");
+							}, onIgnore: (type, property) => {
+								throw new Exception(string.Format("ignoring property {1} on {0}", type.Name, property.PropertyType.Name));
+							});
+			import.ParseConnections("OrderProduct", "Product", "Order", (productId, orderId) =>
+			{
+				commands.Add(new AddProductToOrder { ProductId = productId, OrderId = orderId });
+			});
+
 
 			return commands;
 		}
