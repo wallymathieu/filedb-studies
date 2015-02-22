@@ -55,16 +55,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="TestData\Database.xsc">
-      <DependentUpon>Database.xsd</DependentUpon>
-    </None>
-    <None Include="TestData\Database.xsd">
-      <LastGenOutput>Database.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="TestData\Database.xss">
-      <DependentUpon>Database.xsd</DependentUpon>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestData\TestData.xml">
