@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using With;
 namespace SomeBasicFileStoreApp.Core.Commands
 {
 	public class AddProductToOrderHandler : ICommandHandler<AddProductToOrder>
@@ -18,8 +18,9 @@ namespace SomeBasicFileStoreApp.Core.Commands
 		{
 			var order = _repository.GetOrder(command.OrderId);
 			var product = _repository.GetProduct(command.ProductId);
-			order.Products.Add(product);
-            _repository.Save(order);
+            var products = new List<Product>(order.Products);
+            products.Add(product);
+            _repository.Save(order.With().Eql(o=>o.Products, products));
 		}
 	}
 }

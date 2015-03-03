@@ -54,3 +54,6 @@ build/
 *.sublime-workspace
 packages/
 .vs
+
+*.userprefs
+

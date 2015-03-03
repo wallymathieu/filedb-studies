@@ -5,18 +5,22 @@ namespace SomeBasicFileStoreApp.Core
 {
 	public class Order 
     {
-		public Order()
+        public Order(int id, int customer, DateTime orderDate, IEnumerable<Product> products, int version)
 		{
-			Products = new List<Product>();
+            Id = id;
+            Customer = customer;
+            OrderDate = orderDate;
+            Products = products;
+            Version = version;
         }
-		public virtual int Id { get; set; }
+		public virtual int Id { get; private set; }
 
-		public virtual int Customer { get; set; }
+		public virtual int Customer { get; private set; }
 
-		public virtual DateTime OrderDate { get; set; }
+		public virtual DateTime OrderDate { get; private set; }
 
-		public virtual IList<Product> Products { get; set; }
+        public virtual IEnumerable<Product> Products { get; private set; }
 
-		public virtual int Version { get; set; }
+		public virtual int Version { get; private set; }
 	}
 }

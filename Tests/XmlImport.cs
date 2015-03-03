@@ -19,25 +19,51 @@ namespace SomeBasicFileStoreApp.Tests
 		private object Parse(XElement target, Type type, Action<Type, PropertyInfo> onIgnore)
 		{
 			var props = type.GetProperties();
-			var @object = Activator.CreateInstance(type);
+            var parameters = new Dictionary<string,object>();
 			foreach (var propertyInfo in props)
 			{
 				XElement propElement = target.Element(_ns + propertyInfo.Name);
-				if (null != propElement)
-				{
-					if (!(propertyInfo.PropertyType.IsValueType || propertyInfo.PropertyType == typeof(string)))
-					{
-						onIgnore(type, propertyInfo);
-					}
-					else
-					{
-						var value = Convert.ChangeType(propElement.Value, propertyInfo.PropertyType, CultureInfo.InvariantCulture.NumberFormat);
-						propertyInfo.SetValue(@object, value, null);
-					}
-				}
+                if (null != propElement)
+                {
+                    if (!(propertyInfo.PropertyType.IsValueType || propertyInfo.PropertyType == typeof(string)))
+                    {
+                        onIgnore(type, propertyInfo);
+                        parameters.Add(propertyInfo.Name, GetDefaultValue(propertyInfo.PropertyType));
+                    }
+                    else
+                    {
+                        var value = Convert.ChangeType(propElement.Value, propertyInfo.PropertyType, CultureInfo.InvariantCulture.NumberFormat);
+                        //propertyInfo.SetValue(@object, value, null);
+                        parameters.Add(propertyInfo.Name, value);
+                    }
+                }
+                else
+                {
+                    parameters.Add(propertyInfo.Name, GetDefaultValue(propertyInfo.PropertyType));
+                }
 			}
+            var @object = Activator.CreateInstance(type, parameters.Values.ToArray(),new object[0]);
+
 			return @object;
 		}
+
+        private static object GetDefaultValue(Type t)
+        {
+            if (t.IsGenericType && t.GetGenericTypeDefinition()== typeof(IEnumerable<>))
+            {
+                var listType = typeof(List<>).MakeGenericType(t.GetGenericArguments().Single());
+                return Activator.CreateInstance(listType);
+            }
+
+            if (t.IsValueType)
+            {
+                return Activator.CreateInstance(t);
+            }
+            else
+            {
+                return null;
+            }
+        }
 
 		public IEnumerable<Tuple<Type, Object>> Parse(IEnumerable<Type> types, Action<Type, Object> onParsedEntity = null, Action<Type, PropertyInfo> onIgnore = null)
 		{
