@@ -100,24 +100,5 @@ namespace SomeBasicFileStoreApp.Tests
 			}
 			return list;
 		}
-
-		public IEnumerable<Tuple<int, int>> ParseIntProperty(string name, string elementName, Action<int, int> onParsedEntity = null)
-		{
-			var ns = _ns;
-			var db = xDocument.Root;
-			var elements = db.Elements(ns + name);
-			var list = new List<Tuple<int, int>>();
-
-			foreach (var element in elements)
-			{
-				XElement f = element.Element(ns + "Id");
-				XElement s = element.Element(ns + elementName);
-				var id = int.Parse(f.Value);
-				var other = int.Parse(s.Value);
-				if (null != onParsedEntity) onParsedEntity(id, other);
-				list.Add(Tuple.Create(id, other));
-			}
-			return list;
-		}
 	}
 }
