@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Concurrent;
 
 namespace SomeBasicFileStoreApp.Core
 {
 	public class Repository : IRepository
 	{
-		private IDictionary<long, Customer> _customers = new Dictionary<long, Customer>();
-		private IDictionary<long, Product> _products = new Dictionary<long, Product>();
-		private IDictionary<long, Order> _orders = new Dictionary<long, Order>();
+        private IDictionary<long, Customer> _customers = new ConcurrentDictionary<long, Customer>();
+        private IDictionary<long, Product> _products = new ConcurrentDictionary<long, Product>();
+        private IDictionary<long, Order> _orders = new ConcurrentDictionary<long, Order>();
 
 		public void Save(Customer obj)
 		{
