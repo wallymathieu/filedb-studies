@@ -10,7 +10,7 @@
 
 		public void Handle(AddCustomerCommand command)
 		{
-			_repository.Save(command.Object);
+			_repository.Save(new Customer(command.Id, command.Firstname, command.Lastname, command.Version));
 		}
 	}
 }

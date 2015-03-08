@@ -7,49 +7,42 @@ using System.Xml.Linq;
 
 namespace SomeBasicFileStoreApp.Tests
 {
-	public class XmlImport
-	{
-		XNamespace _ns;
-		XDocument xDocument;
-		public XmlImport(XDocument xDocument, XNamespace ns)
-		{
-			_ns = ns;
-			this.xDocument = xDocument;
-		}
-		private object Parse(XElement target, Type type, Action<Type, PropertyInfo> onIgnore)
-		{
-			var props = type.GetProperties();
-            var parameters = new Dictionary<string,object>();
-			foreach (var propertyInfo in props)
-			{
-				XElement propElement = target.Element(_ns + propertyInfo.Name);
+    public class XmlImport
+    {
+        private readonly XNamespace _ns;
+        private readonly XDocument xDocument;
+        public XmlImport(XDocument xDocument, XNamespace ns)
+        {
+            _ns = ns;
+            this.xDocument = xDocument;
+        }
+        private TargetType Parse<TargetType>(XElement target, string typeName, Action<string, PropertyInfo> onIgnore)
+        {
+            var props = typeof(TargetType).GetProperties();
+            var @object = Activator.CreateInstance(typeof(TargetType));
+            foreach (var propertyInfo in props)
+            {
+                XElement propElement = target.Element(_ns + propertyInfo.Name);
                 if (null != propElement)
                 {
                     if (!(propertyInfo.PropertyType.IsValueType || propertyInfo.PropertyType == typeof(string)))
                     {
-                        onIgnore(type, propertyInfo);
-                        parameters.Add(propertyInfo.Name, GetDefaultValue(propertyInfo.PropertyType));
+                        if (null != onIgnore)
+                            onIgnore(typeName, propertyInfo);
                     }
                     else
                     {
                         var value = Convert.ChangeType(propElement.Value, propertyInfo.PropertyType, CultureInfo.InvariantCulture.NumberFormat);
-                        //propertyInfo.SetValue(@object, value, null);
-                        parameters.Add(propertyInfo.Name, value);
+                        propertyInfo.SetValue(@object, value, null);
                     }
                 }
-                else
-                {
-                    parameters.Add(propertyInfo.Name, GetDefaultValue(propertyInfo.PropertyType));
-                }
-			}
-            var @object = Activator.CreateInstance(type, parameters.Values.ToArray(),new object[0]);
-
-			return @object;
-		}
+            }
+            return (TargetType)@object;
+        }
 
         private static object GetDefaultValue(Type t)
         {
-            if (t.IsGenericType && t.GetGenericTypeDefinition()== typeof(IEnumerable<>))
+            if (t.IsGenericType && t.GetGenericTypeDefinition() == typeof(IEnumerable<>))
             {
                 var listType = typeof(List<>).MakeGenericType(t.GetGenericArguments().Single());
                 return Activator.CreateInstance(listType);
@@ -65,40 +58,39 @@ namespace SomeBasicFileStoreApp.Tests
             }
         }
 
-		public IEnumerable<Tuple<Type, Object>> Parse(IEnumerable<Type> types, Action<Type, Object> onParsedEntity = null, Action<Type, PropertyInfo> onIgnore = null)
-		{
-			var db = xDocument.Root;
-			var list = new List<Tuple<Type, Object>>();
+        public IEnumerable<T> Parse<T>(string type, Action<T> onParsedEntity = null, Action<string, PropertyInfo> onIgnore = null)
+        {
+            var db = xDocument.Root;
+            var list = new List<T>();
 
-			foreach (var type in types)
-			{
-				var elements = db.Elements(_ns + type.Name);
-
-				foreach (var element in elements)
-				{
-					var obj = Parse(element, type, onIgnore);
-					if (null != onParsedEntity) onParsedEntity(type, obj);
-					list.Add(Tuple.Create(type, obj));
-				}
-			}
-			return list;
-		}
-		public IEnumerable<Tuple<int, int>> ParseConnections(string name, string first, string second, Action<int, int> onParsedEntity = null)
-		{
-			var ns = _ns;
-			var db = xDocument.Root;
-			var elements = db.Elements(ns + name);
-			var list = new List<Tuple<int, int>>();
-			foreach (var element in elements)
-			{
-				XElement f = element.Element(ns + first);
-				XElement s = element.Element(ns + second);
-				var firstValue = int.Parse(f.Value);
-				var secondValue = int.Parse(s.Value);
-				if (null != onParsedEntity) onParsedEntity(firstValue, secondValue);
-				list.Add(Tuple.Create(firstValue, secondValue));
-			}
-			return list;
-		}
-	}
+            var elements = db.Elements(_ns + type);
+            foreach (var element in elements)
+            {
+                var obj = Parse<T>(element, type, onIgnore);
+                if (null != onParsedEntity)
+                    onParsedEntity(obj);
+                list.Add(obj);
+            }
+        
+            return list;
+        }
+        public IEnumerable<Tuple<int, int>> ParseConnections(string name, string first, string second, Action<int, int> onParsedEntity = null)
+        {
+            var ns = _ns;
+            var db = xDocument.Root;
+            var elements = db.Elements(ns + name);
+            var list = new List<Tuple<int, int>>();
+            foreach (var element in elements)
+            {
+                XElement f = element.Element(ns + first);
+                XElement s = element.Element(ns + second);
+                var firstValue = int.Parse(f.Value);
+                var secondValue = int.Parse(s.Value);
+                if (null != onParsedEntity)
+                    onParsedEntity(firstValue, secondValue);
+                list.Add(Tuple.Create(firstValue, secondValue));
+            }
+            return list;
+        }
+    }
 }

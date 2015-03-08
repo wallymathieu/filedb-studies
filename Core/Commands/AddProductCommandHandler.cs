@@ -10,7 +10,7 @@
 
 		public void Handle(AddProductCommand command)
 		{
-			_repository.Save(command.Object);
+			_repository.Save(new Product(command.Id, command.Cost, command.Name, command.Version));
 		}
 	}
 }

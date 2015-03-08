@@ -10,7 +10,7 @@
 
 		public void Handle(AddOrderCommand command)
 		{
-			_repository.Save(command.Object);
+			_repository.Save(new Order(command.Id, command.Customer, command.OrderDate, new Product[0], command.Version));
 		}
 	}
 }

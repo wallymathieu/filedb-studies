@@ -17,24 +17,29 @@ namespace SomeBasicFileStoreApp.Tests
 		{
 			var commands = new List<Command>();
 			var import = new XmlImport(XDocument.Load(Path.Combine("TestData", "TestData.xml")), "http://tempuri.org/Database.xsd");
-			import.Parse(new[] { typeof(Customer), typeof(Order), typeof(Product) },
-							(type, obj) =>
+			import.Parse<AddCustomerCommand>("Customer",
+							(obj) =>
 							{
-								if (obj is Customer)
-								{
-									commands.Add(new AddCustomerCommand { Object = (Customer)obj });
-								}
-								if (obj is Product)
-								{
-									commands.Add(new AddProductCommand { Object = (Product)obj });
-								}
-								if (obj is Order)
-								{
-									commands.Add(new AddOrderCommand { Object = (Order)obj });
-								}
+								commands.Add(obj);
 							}, onIgnore: (type, property) => {
-								throw new Exception(string.Format("ignoring property {1} on {0}", type.Name, property.PropertyType.Name));
+								throw new Exception(string.Format("ignoring property {1} on {0}", type, property.PropertyType.Name));
 							});
+			import.Parse<AddOrderCommand>("Order", 
+							(obj) =>
+							{
+								commands.Add(obj);
+							}, onIgnore: (type, property) => {
+								throw new Exception(string.Format("ignoring property {1} on {0}", type, property.PropertyType.Name));
+							});
+
+			import.Parse<AddProductCommand>("Product", 
+							(obj) =>
+							{
+								commands.Add(obj);
+							}, onIgnore: (type, property) => {
+								throw new Exception(string.Format("ignoring property {1} on {0}", type, property.PropertyType.Name));
+							});
+
 			import.ParseConnections("OrderProduct", "Product", "Order", (productId, orderId) =>
 			{
 				commands.Add(new AddProductToOrder { ProductId = productId, OrderId = orderId });
