@@ -46,6 +46,11 @@ namespace SomeBasicFileStoreApp.Core
 			return _products[v];
 		}
 
+        public IEnumerable<Order> QueryOverOrders()
+        {
+            return _orders.Values;
+        }
+
 		public Order GetOrder(int v)
 		{
 			return _orders[v];
