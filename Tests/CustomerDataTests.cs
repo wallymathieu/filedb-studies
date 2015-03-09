@@ -11,7 +11,7 @@ namespace SomeBasicFileStoreApp.Tests
 	public class CustomerDataTests
 	{
 		private IRepository _repository;
-
+        private ObjectContainer _container;
 		[Test]
 		public void CanGetCustomerById()
 		{
@@ -36,10 +36,10 @@ namespace SomeBasicFileStoreApp.Tests
 		[TestFixtureSetUp]
 		public void TestFixtureSetup()
 		{
-			var testAdapter = new ObjectContainer();
-			_repository = testAdapter.GetRepository();
+			_container = new ObjectContainer();
+            _repository = _container.GetRepository();
 			var commands = new GetCommands().Get();
-            var handlers = testAdapter.GetAllHandlers();
+            var handlers = _container.GetAllHandlers();
 			foreach (var command in commands)
 			{
                 foreach (var handler in handlers.Where(h=>h.CanHandle(command.GetType())))
@@ -48,5 +48,10 @@ namespace SomeBasicFileStoreApp.Tests
 				}
 			}
 		}
+        [TestFixtureTearDown]
+        public void TestFixtureTearDown()
+        {
+            _container.Dispose();
+        }
 	}
 }

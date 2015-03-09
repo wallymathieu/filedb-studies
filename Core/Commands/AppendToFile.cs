@@ -18,7 +18,7 @@ namespace SomeBasicFileStoreApp.Core.Commands
 			this.v = v;
 		}
 
-		public void Batch(IEnumerable<Command> commands)
+        public virtual void Batch(IEnumerable<Command> commands)
 		{
 			
             using (var fs = File.Open(v, FileMode.Append, FileAccess.Write, FileShare.Read))
@@ -27,7 +27,7 @@ namespace SomeBasicFileStoreApp.Core.Commands
 			}
 		}
 
-		public IEnumerable<Command> ReadAll()
+        public virtual IEnumerable<Command> ReadAll()
 		{
 			using (var fs = File.Open(v, FileMode.Open, FileAccess.Read, FileShare.Read))
 			{

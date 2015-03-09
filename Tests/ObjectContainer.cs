@@ -5,16 +5,25 @@ using SomeBasicFileStoreApp.Core.Commands;
 
 namespace SomeBasicFileStoreApp.Tests
 {
-	internal class ObjectContainer 
+    internal class ObjectContainer:IDisposable
 	{
 		private ICommandHandler[] handlers;
+        private PersistToFileHandler _persistToFile;
 		private readonly IRepository _repository = new Repository();
 		public ObjectContainer()
 		{
+            _persistToFile = new PersistToFileHandler(new AppendToFile("testfile.db"), 100);
 			handlers =  new ICommandHandler[] {
                 new RepositoryCommandHandler(_repository),
+                _persistToFile
             };
         }
+
+        public void Boot()
+        {
+            _persistToFile.Start();
+        }
+
 		public IRepository GetRepository()
 		{
 			return _repository;
@@ -24,5 +33,10 @@ namespace SomeBasicFileStoreApp.Tests
 		{
 			return handlers;
 		}
+
+        public void Dispose()
+        {
+            _persistToFile.Stop();
+        }
 	}
 }
