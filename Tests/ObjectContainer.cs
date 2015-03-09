@@ -12,10 +12,7 @@ namespace SomeBasicFileStoreApp.Tests
 		public ObjectContainer()
 		{
 			handlers =  new ICommandHandler[] {
-				new AddCustomerCommandHandler(_repository),
-				new AddOrderCommandHandler(_repository),
-				new AddProductCommandHandler(_repository),
-				new AddProductToOrderHandler(_repository)
+                new RepositoryCommandHandler(_repository),
             };
         }
 		public IRepository GetRepository()

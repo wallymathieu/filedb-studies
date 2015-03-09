@@ -16,5 +16,11 @@ namespace SomeBasicFileStoreApp.Core.Commands
 
         [ProtoMember(4)]
         public virtual string Lastname { get; private set; }
+
+        public override void Handle(IRepository _repository)
+        {
+            var command = this;
+            _repository.Save(new Customer(command.Id, command.Firstname, command.Lastname, command.Version));
+        }
     }
 }

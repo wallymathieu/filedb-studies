@@ -39,11 +39,10 @@ namespace SomeBasicFileStoreApp.Tests
 			var testAdapter = new ObjectContainer();
 			_repository = testAdapter.GetRepository();
 			var commands = new GetCommands().Get();
-			var handlers = testAdapter.GetAllHandlers()
-				.ToLookup(h => h.GetCommandTypes().Single());// note that we assume that all handlers only handle one type of command
+            var handlers = testAdapter.GetAllHandlers();
 			foreach (var command in commands)
 			{
-				foreach (var handler in handlers[command.GetType()])
+                foreach (var handler in handlers.Where(h=>h.CanHandle(command.GetType())))
 				{
 					handler.Handle(command);
 				}

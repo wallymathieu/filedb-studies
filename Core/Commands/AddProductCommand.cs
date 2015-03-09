@@ -13,5 +13,11 @@ namespace SomeBasicFileStoreApp.Core.Commands
         public virtual float Cost { get; private set; }
         [ProtoMember(4)]
         public virtual string Name { get; private set; }
+    
+        public override void Handle(IRepository _repository)
+        {
+            var command = this;
+            _repository.Save(new Product(command.Id, command.Cost, command.Name, command.Version));
+        }
     }
 }
