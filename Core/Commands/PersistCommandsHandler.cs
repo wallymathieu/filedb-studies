@@ -36,28 +36,25 @@ namespace SomeBasicFileStoreApp.Core.Commands
             while (!stop)
             {
                 signal.WaitOne();
+                var commands = new List<Command>();
                 lock (_key)
                 {
-                    var commands = new List<Command>();
                     Command command;
                     while (Commands.TryDequeue(out command))
                     {
                         commands.Add(command);
                     }
-                    if (commands.Any())
-                    {
-                        _appendBatch.Batch(commands);
-                    }
+                }
+                if (commands.Any())
+                {
+                    _appendBatch.Batch(commands);
                 }
             }
         }
 
         public void Stop()
         {
-            lock (_key)
-            {
-                stop = true;
-            }
+            stop = true;
             signal.Set();
 
             if (thread != null)
