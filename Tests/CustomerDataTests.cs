@@ -37,6 +37,7 @@ namespace SomeBasicFileStoreApp.Tests
 		public void TestFixtureSetup()
 		{
 			_container = new ObjectContainer();
+            //_container.Boot();
             _repository = _container.GetRepository();
 			var commands = new GetCommands().Get();
             var handlers = _container.GetAllHandlers();

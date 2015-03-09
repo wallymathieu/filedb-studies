@@ -4,7 +4,7 @@ using System.IO;
 
 namespace SomeBasicFileStoreApp.Core.Commands
 {
-	public class AppendToFile : Model
+    public class AppendToFile : Model, IAppendBatch
 	{
 
 		static AppendToFile()

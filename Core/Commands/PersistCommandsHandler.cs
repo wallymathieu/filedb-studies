@@ -6,19 +6,19 @@ using System.Linq;
 
 namespace SomeBasicFileStoreApp.Core.Commands
 {
-    public class PersistToFileHandler:ICommandHandler<Command>
+    public class PersistCommandsHandler:ICommandHandler<Command>
     {
         private Thread thread;
         private bool stop = false;
         private readonly object _key = new object();
         private readonly ConcurrentQueue<Command> Commands = new ConcurrentQueue<Command>();
-        private readonly AppendToFile _appendToFile;
-        private readonly int _sleep;
+        private readonly IAppendBatch _appendBatch;
+        private EventWaitHandle signal;
 
-        public PersistToFileHandler(AppendToFile appendToFile, int sleep)
+        public PersistCommandsHandler(IAppendBatch appendBatch)
         {
-            _appendToFile = appendToFile;
-            _sleep = sleep;
+            _appendBatch = appendBatch;
+            signal = new EventWaitHandle(false, EventResetMode.AutoReset);
         }
 
         public void Start()
@@ -33,8 +33,9 @@ namespace SomeBasicFileStoreApp.Core.Commands
 
         private void ThreadStart()
         {
-            while (!stop || !Commands.IsEmpty)
-            { 
+            while (!stop)
+            {
+                signal.WaitOne();
                 lock (_key)
                 {
                     var commands = new List<Command>();
@@ -45,10 +46,9 @@ namespace SomeBasicFileStoreApp.Core.Commands
                     }
                     if (commands.Any())
                     {
-                        _appendToFile.Batch(commands);
+                        _appendBatch.Batch(commands);
                     }
                 }
-                Thread.Sleep(_sleep);
             }
         }
 
@@ -58,6 +58,8 @@ namespace SomeBasicFileStoreApp.Core.Commands
             {
                 stop = true;
             }
+            signal.Set();
+
             if (thread != null)
             {
                 thread.Join();
@@ -71,6 +73,7 @@ namespace SomeBasicFileStoreApp.Core.Commands
                 // send the command to separate thread and persist it
                 Commands.Enqueue(command);
             }
+            signal.Set();
         }
     }
 }

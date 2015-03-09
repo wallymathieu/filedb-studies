@@ -10,9 +10,12 @@ namespace SomeBasicFileStoreApp.Tests
 		private ICommandHandler[] handlers;
         private PersistToFileHandler _persistToFile;
 		private readonly IRepository _repository = new Repository();
-		public ObjectContainer()
+        private readonly FakeAppendToFile _fakeAppendToFile;
+		
+        public ObjectContainer()
 		{
-            _persistToFile = new PersistToFileHandler(new AppendToFile("testfile.db"), 100);
+            _fakeAppendToFile = new FakeAppendToFile();
+            _persistToFile = new PersistToFileHandler(_fakeAppendToFile);
 			handlers =  new ICommandHandler[] {
                 new RepositoryCommandHandler(_repository),
                 _persistToFile
@@ -37,6 +40,10 @@ namespace SomeBasicFileStoreApp.Tests
         public void Dispose()
         {
             _persistToFile.Stop();
+        }
+
+        public IEnumerable<Command[]> BatchesPersisted(){
+            return _fakeAppendToFile.Batches();
         }
 	}
 }
