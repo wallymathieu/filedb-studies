@@ -35,18 +35,26 @@ namespace SomeBasicFileStoreApp.Core.Commands
             while (!stop)
             {
                 signal.WaitOne();
-                var commands = new List<Command>();
+                AppendBatch();
+            }
+            // While the batch has been running, more commands might have been added
+            // and stop might have been called
+            AppendBatch();
+        }
+
+        private void AppendBatch()
+        { 
+            var commands = new List<Command>();
+            {
+                Command command;
+                while (Commands.TryDequeue(out command))
                 {
-                    Command command;
-                    while (Commands.TryDequeue(out command))
-                    {
-                        commands.Add(command);
-                    }
+                    commands.Add(command);
                 }
-                if (commands.Any())
-                {
-                    _appendBatch.Batch(commands);
-                }
+            }
+            if (commands.Any())
+            {
+                _appendBatch.Batch(commands);
             }
         }
 

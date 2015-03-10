@@ -16,7 +16,7 @@ namespace SomeBasicFileStoreApp.Tests
         public void Batch(IEnumerable<Command> commands)
         {
             batches.Enqueue(commands.ToArray());
-            //Task.Delay(100).Wait();
+            Thread.Sleep(100);
         }
 
         public IEnumerable<Command[]> Batches()
