@@ -41,7 +41,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="With">
-      <HintPath>..\packages\With.0.4.3\lib\40\With.dll</HintPath>
+      <HintPath>..\packages\With.0.4.4\lib\40\With.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
