@@ -22,7 +22,7 @@ namespace SomeBasicFileStoreApp.Core.Commands
             var product = _repository.GetProduct(command.ProductId);
             var products = new List<Product>(order.Products);
             products.Add(product);
-            _repository.Save(order.With().Eql(o=>o.Products, products));
+            _repository.Save(order.With(o=>o.Products==products));
         }
 	}
 }
