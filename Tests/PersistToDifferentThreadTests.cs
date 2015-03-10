@@ -5,31 +5,55 @@ using SomeBasicFileStoreApp.Core;
 using System.Linq;
 using System;
 using System.Collections.Generic;
+using SomeBasicFileStoreApp.Core.Commands;
+
+
 namespace SomeBasicFileStoreApp.Tests
 {
 	
     [TestFixture]
     public class PersistToDifferentThreadTests
     {
-        private ObjectContainer _container;
-        [Test]
-        public void WillSendCommandsToDifferentThread()
+        private Command[][] _batches;
+        private Command[] _commandsSent;
+        [TestFixtureSetUp]
+        public void TestFixtureSetUp()
         {
-            _container = new ObjectContainer();
-            _container.Boot();
-            var commands = new GetCommands().Get().ToArray();
-            var handlers = _container.GetAllHandlers();
-            foreach (var command in commands)
+            var container = new ObjectContainer();
+            container.Boot();
+            _commandsSent = new GetCommands().Get().ToArray();
+            var handlers = container.GetAllHandlers();
+            foreach (var command in _commandsSent)
             {
                 foreach (var handler in handlers.Where(h=>h.CanHandle(command.GetType())))
                 {
                     handler.Handle(command);
                 }
             }
-            _container.Dispose();
-            var batches = _container.BatchesPersisted().ToArray();
-            Assert.That(batches.Count(), Is.LessThanOrEqualTo(commands.Count()));
-            Assert.That(batches.SelectMany(b=>b).Count(), Is.EqualTo(commands.Count()));
+            container.Dispose();
+            _batches = container.BatchesPersisted().ToArray();
+        }
+
+        [Test]
+        public void Will_send_all_commands_to_the_different_thread()
+        {
+            Assert.That(_batches.Count(), Is.LessThanOrEqualTo(_commandsSent.Count()));
+            Assert.That(_batches.SelectMany(b=>b).Count(), Is.EqualTo(_commandsSent.Count()));
+        }
+
+        [Test]
+        public void Order()
+        {
+            var enumerator = _batches.SelectMany(b => b).GetEnumerator();
+            enumerator.MoveNext();
+            var last = enumerator.Current;
+            for (; enumerator.MoveNext(); )
+            {
+                Assert.That(enumerator.Current.SequenceNumber, Is.GreaterThan(last.SequenceNumber));
+                last = enumerator.Current;
+            }
+            //Console.WriteLine(string.Join(", ",
+            //    _batches.Select(b => "["+string.Join(", ", b.Select(a => a.SequenceNumber)) +"]" )));
         }
     }
 }

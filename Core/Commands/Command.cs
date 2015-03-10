@@ -9,6 +9,7 @@ namespace SomeBasicFileStoreApp.Core.Commands
 	[ProtoInclude(4, typeof(AddProductToOrder))]
 	public abstract class Command
 	{
+        public long SequenceNumber { get; set; }
         public abstract void Handle(IRepository repository);
 	}
 }

@@ -42,7 +42,8 @@ namespace SomeBasicFileStoreApp.Tests
             _persistToFile.Stop();
         }
 
-        public IEnumerable<Command[]> BatchesPersisted(){
+        public IEnumerable<Command[]> BatchesPersisted()
+        {
             return _fakeAppendToFile.Batches();
         }
 	}

@@ -4,16 +4,23 @@ using SomeBasicFileStoreApp.Core;
 using SomeBasicFileStoreApp.Core.Commands;
 using System.Linq;
 using System.Collections.Concurrent;
+using System.Threading;
+using System.Threading.Tasks;
+
+
 namespace SomeBasicFileStoreApp.Tests
 {
     public class FakeAppendToFile:IAppendBatch
 	{
-        private readonly ConcurrentStack<Command[]> batches = new ConcurrentStack<Command[]>();
+        private readonly ConcurrentQueue<Command[]> batches = new ConcurrentQueue<Command[]>();
         public void Batch(IEnumerable<Command> commands)
         {
-            batches.Push(commands.ToArray());
+            batches.Enqueue(commands.ToArray());
+            //Task.Delay(100).Wait();
         }
-        public IEnumerable<Command[]> Batches(){
+
+        public IEnumerable<Command[]> Batches()
+        {
             return batches.ToArray();
         }
 	}

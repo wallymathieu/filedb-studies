@@ -38,7 +38,7 @@ namespace SomeBasicFileStoreApp.Tests
 		{
 			var commands = new GetCommands().Get().ToArray();
 			_persist = new AppendToFile("CustomerDataTests.db");
-			_persist.Batch(commands);
+            _persist.Batch(commands);
 			Assert.That(_persist.ReadAll().Count(), Is.EqualTo(commands.Length));
 		}
 	}

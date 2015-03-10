@@ -20,10 +20,10 @@ namespace SomeBasicFileStoreApp.Core.Commands
 
         public virtual void Batch(IEnumerable<Command> commands)
 		{
-			
             using (var fs = File.Open(v, FileMode.Append, FileAccess.Write, FileShare.Read))
 			{
 				Serializer.Serialize(fs, commands);
+                fs.Flush();
 			}
 		}
 
