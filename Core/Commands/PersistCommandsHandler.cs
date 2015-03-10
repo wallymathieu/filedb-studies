@@ -10,7 +10,6 @@ namespace SomeBasicFileStoreApp.Core.Commands
     {
         private Thread thread;
         private bool stop = false;
-        private readonly object _key = new object();
         private readonly ConcurrentQueue<Command> Commands = new ConcurrentQueue<Command>();
         private readonly IAppendBatch _appendBatch;
         private EventWaitHandle signal;
@@ -37,7 +36,6 @@ namespace SomeBasicFileStoreApp.Core.Commands
             {
                 signal.WaitOne();
                 var commands = new List<Command>();
-                lock (_key)
                 {
                     Command command;
                     while (Commands.TryDequeue(out command))
@@ -65,11 +63,8 @@ namespace SomeBasicFileStoreApp.Core.Commands
 
         public void Handle(Command command)
         {
-            lock (_key)
-            {
-                // send the command to separate thread and persist it
-                Commands.Enqueue(command);
-            }
+            // send the command to separate thread and persist it
+            Commands.Enqueue(command);
             signal.Set();
         }
     }
