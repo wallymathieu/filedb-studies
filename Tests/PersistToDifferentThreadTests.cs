@@ -2,7 +2,8 @@ using NUnit.Framework;
 using SomeBasicFileStoreApp.Core;
 using System.Linq;
 using SomeBasicFileStoreApp.Core.Commands;
-
+using With.Collections;
+using With.Destructure;
 
 namespace SomeBasicFileStoreApp.Tests
 {
@@ -40,14 +41,11 @@ namespace SomeBasicFileStoreApp.Tests
         [Test]
         public void Order()
         {
-            var enumerator = _batches.SelectMany(b => b).GetEnumerator();
-            enumerator.MoveNext();
-            var last = enumerator.Current;
-            for (; enumerator.MoveNext(); )
-            {
-                Assert.That(enumerator.Current.SequenceNumber, Is.GreaterThan(last.SequenceNumber));
-                last = enumerator.Current;
-            }
+            _batches.SelectMany(b => b).Stitch((last, current) =>
+                {
+                    Assert.That(current.SequenceNumber, 
+                        Is.GreaterThan(last.SequenceNumber));
+                });
             //Console.WriteLine(string.Join(", ",
             //    _batches.Select(b => "["+string.Join(", ", b.Select(a => a.SequenceNumber)) +"]" )));
         }

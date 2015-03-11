@@ -1,6 +1,7 @@
 ﻿using ProtoBuf;
 using System.Collections.Generic;
 using With;
+using With.Collections;
 namespace SomeBasicFileStoreApp.Core.Commands
 {
     [ProtoContract]
@@ -16,9 +17,8 @@ namespace SomeBasicFileStoreApp.Core.Commands
             var command = this;
             var order = _repository.GetOrder(command.OrderId);
             var product = _repository.GetProduct(command.ProductId);
-            var products = new List<Product>(order.Products);
-            products.Add(product);
-            _repository.Save(order.With(o=>o.Products==products));
+            _repository.Save(order.With(o=>
+                o.Products.Add(product)));
         }
 	}
 }
