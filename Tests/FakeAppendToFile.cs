@@ -1,21 +1,17 @@
-using System;
 using System.Collections.Generic;
-using SomeBasicFileStoreApp.Core;
 using SomeBasicFileStoreApp.Core.Commands;
 using System.Linq;
-using System.Collections.Concurrent;
 using System.Threading;
-using System.Threading.Tasks;
 
 
 namespace SomeBasicFileStoreApp.Tests
 {
     public class FakeAppendToFile:IAppendBatch
 	{
-        private readonly ConcurrentQueue<Command[]> batches = new ConcurrentQueue<Command[]>();
+        private readonly IList<Command[]> batches = new List<Command[]>();
         public void Batch(IEnumerable<Command> commands)
         {
-            batches.Enqueue(commands.ToArray());
+            batches.Add(commands.ToArray());
             Thread.Sleep(100);
         }
 
