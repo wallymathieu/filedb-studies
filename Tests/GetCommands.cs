@@ -1,14 +1,12 @@
-﻿using SomeBasicFileStoreApp.Core;
-using SomeBasicFileStoreApp.Core.Commands;
+﻿using SomeBasicFileStoreApp.Core.Commands;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Xml.Linq;
 
 namespace SomeBasicFileStoreApp.Tests
 {
-	class GetCommands
+    class GetCommands
 	{
         private int sequence = 0;
 		public GetCommands()

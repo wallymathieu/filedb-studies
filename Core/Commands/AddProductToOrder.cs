@@ -1,13 +1,9 @@
 ﻿using ProtoBuf;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using With;
 namespace SomeBasicFileStoreApp.Core.Commands
 {
-	[ProtoContract]
+    [ProtoContract]
 	public class AddProductToOrder :Command
 	{
 		[ProtoMember(1)]

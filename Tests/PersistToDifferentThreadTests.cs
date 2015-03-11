@@ -1,16 +1,12 @@
-using System.IO;
-using System.Xml.Linq;
 using NUnit.Framework;
 using SomeBasicFileStoreApp.Core;
 using System.Linq;
-using System;
-using System.Collections.Generic;
 using SomeBasicFileStoreApp.Core.Commands;
 
 
 namespace SomeBasicFileStoreApp.Tests
 {
-	
+
     [TestFixture]
     public class PersistToDifferentThreadTests
     {

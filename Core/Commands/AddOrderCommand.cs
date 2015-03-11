@@ -1,5 +1,4 @@
-﻿
-using ProtoBuf;
+﻿using ProtoBuf;
 using System;
 
 namespace SomeBasicFileStoreApp.Core.Commands

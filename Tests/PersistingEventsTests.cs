@@ -1,13 +1,11 @@
 ﻿using NUnit.Framework;
 using System.IO;
-using System.Collections.Generic;
-using SomeBasicFileStoreApp.Core;
 using System.Linq;
 using SomeBasicFileStoreApp.Core.Commands;
 using With;
 namespace SomeBasicFileStoreApp.Tests
 {
-	[TestFixture]
+    [TestFixture]
 	public class PersistingEventsTests
 	{
 		private AppendToFile _persist;
