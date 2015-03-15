@@ -3,6 +3,7 @@ using System.Threading;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using SomeBasicFileStoreApp.Core.Infrastructure;
 
 namespace SomeBasicFileStoreApp.Core.Commands
 {

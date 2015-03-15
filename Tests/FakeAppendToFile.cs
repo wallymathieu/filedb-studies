@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using SomeBasicFileStoreApp.Core.Commands;
 using System.Linq;
 using System.Threading;
-
+using SomeBasicFileStoreApp.Core.Infrastructure;
 
 namespace SomeBasicFileStoreApp.Tests
 {

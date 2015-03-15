@@ -1,6 +1,7 @@
+using SomeBasicFileStoreApp.Core.Commands;
 using System.Collections.Generic;
 
-namespace SomeBasicFileStoreApp.Core.Commands
+namespace SomeBasicFileStoreApp.Core.Infrastructure
 {
     public interface IAppendBatch
     {

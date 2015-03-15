@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using ProtoBuf;
 using System.IO;
+using SomeBasicFileStoreApp.Core.Commands;
 
-namespace SomeBasicFileStoreApp.Core.Commands
+namespace SomeBasicFileStoreApp.Core.Infrastructure.ProtoBuf
 {
     public class AppendToFile : Model, IAppendBatch
 	{

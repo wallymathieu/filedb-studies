@@ -50,8 +50,9 @@
   <ItemGroup>
     <Compile Include="CustomerDataTests.cs" />
     <Compile Include="GetCommands.cs" />
+    <Compile Include="Json\PersistingEventsTests.cs" />
     <Compile Include="ObjectContainer.cs" />
-    <Compile Include="PersistingEventsTests.cs" />
+    <Compile Include="ProtoBuf\PersistingEventsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XmlImport.cs" />
     <Compile Include="FakeAppendToFile.cs" />

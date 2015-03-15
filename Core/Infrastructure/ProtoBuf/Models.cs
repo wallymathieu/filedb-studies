@@ -1,6 +1,6 @@
 ﻿using ProtoBuf.Meta;
 
-namespace SomeBasicFileStoreApp.Core.Commands
+namespace SomeBasicFileStoreApp.Core.Infrastructure.ProtoBuf
 {
 	public class Model
 	{
