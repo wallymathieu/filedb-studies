@@ -46,13 +46,13 @@ namespace SomeBasicFileStoreApp.Core.Commands
         private void AppendBatch()
         { 
             var commands = new List<Command>();
+
+            Command command;
+            while (Commands.TryDequeue(out command))
             {
-                Command command;
-                while (Commands.TryDequeue(out command))
-                {
-                    commands.Add(command);
-                }
+                commands.Add(command);
             }
+
             if (commands.Any())
             {
                 _appendBatch.Batch(commands);

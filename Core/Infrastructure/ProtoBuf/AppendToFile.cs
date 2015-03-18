@@ -7,11 +7,6 @@ namespace SomeBasicFileStoreApp.Core.Infrastructure.ProtoBuf
 {
     public class AppendToFile : Model, IAppendBatch
 	{
-
-		static AppendToFile()
-		{
-		}
-
 		private string v;
 
 		public AppendToFile(string v)

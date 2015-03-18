@@ -1,7 +1,8 @@
 ﻿using ProtoBuf;
 using System.Collections.Generic;
 using With;
-using With.Collections;
+using With.ReadonlyEnumerable;
+
 namespace SomeBasicFileStoreApp.Core.Commands
 {
     [ProtoContract]
