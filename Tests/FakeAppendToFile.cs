@@ -6,8 +6,8 @@ using SomeBasicFileStoreApp.Core.Infrastructure;
 
 namespace SomeBasicFileStoreApp.Tests
 {
-    public class FakeAppendToFile:IAppendBatch
-	{
+    public class FakeAppendToFile : IAppendBatch
+    {
         private readonly IList<Command[]> batches = new List<Command[]>();
         public void Batch(IEnumerable<Command> commands)
         {
@@ -19,5 +19,5 @@ namespace SomeBasicFileStoreApp.Tests
         {
             return batches.ToArray();
         }
-	}
+    }
 }

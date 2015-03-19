@@ -44,8 +44,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="With">
-      <HintPath>..\packages\With.0.4.9\lib\net40\With.dll</HintPath>
+    <Reference Include="With, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\With.0.4.11\lib\net40\With.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
