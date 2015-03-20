@@ -17,9 +17,8 @@ namespace SomeBasicFileStoreApp.Core.Commands
         {
             var command = this;
             var order = _repository.GetOrder(command.OrderId);
-            var product = _repository.GetProduct(command.ProductId);
             _repository.Save(order.With(o =>
-                o.Products.Add(product)));
+                o.Products.Add(_repository.GetProduct(command.ProductId))));
         }
     }
 }

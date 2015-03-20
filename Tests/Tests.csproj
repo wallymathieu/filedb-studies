@@ -44,7 +44,7 @@
       <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="With, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\With.0.4.11\lib\net40\With.dll</HintPath>
+      <HintPath>..\packages\With.0.4.13\lib\net40\With.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
