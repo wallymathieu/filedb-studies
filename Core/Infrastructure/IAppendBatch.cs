@@ -6,5 +6,6 @@ namespace SomeBasicFileStoreApp.Core.Infrastructure
     public interface IAppendBatch
     {
         void Batch(IEnumerable<Command> commands);
+        IEnumerable<Command> ReadAll();
     }
 }

@@ -1,9 +1,7 @@
 using NUnit.Framework;
-using SomeBasicFileStoreApp.Core;
 using System.Linq;
 using SomeBasicFileStoreApp.Core.Commands;
-using With.Collections;
-using With.Destructure;
+using With.Linq;
 
 namespace SomeBasicFileStoreApp.Tests
 {
@@ -19,14 +17,7 @@ namespace SomeBasicFileStoreApp.Tests
             var container = new ObjectContainer();
             container.Boot();
             _commandsSent = new GetCommands().Get().ToArray();
-            var handlers = container.GetAllHandlers();
-            foreach (var command in _commandsSent)
-            {
-                foreach (var handler in handlers.Where(h=>h.CanHandle(command.GetType())))
-                {
-                    handler.Handle(command);
-                }
-            }
+            container.HandleAll(_commandsSent);
             container.Dispose();
             _batches = container.BatchesPersisted().ToArray();
         }
@@ -41,11 +32,14 @@ namespace SomeBasicFileStoreApp.Tests
         [Test]
         public void Order()
         {
-            _batches.SelectMany(b => b).Stitch((last, current) =>
-                {
-                    Assert.That(current.SequenceNumber, 
-                        Is.GreaterThan(last.SequenceNumber));
-                });
+            _batches.SelectMany(b => b).Pairwise(((last, current) =>
+            {
+                Assert.That(current.SequenceNumber,
+                    Is.GreaterThan(last.SequenceNumber));
+                return "Success";
+            })).ToArray();
+
+              ;
             //Console.WriteLine(string.Join(", ",
             //    _batches.Select(b => "["+string.Join(", ", b.Select(a => a.SequenceNumber)) +"]" )));
         }

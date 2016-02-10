@@ -2,7 +2,7 @@
 
 namespace SomeBasicFileStoreApp.Core.Commands
 {
-    public class RepositoryCommandHandler:ICommandHandler<Command>
+    public class RepositoryCommandHandler
     {
         private readonly IRepository repository;
         public RepositoryCommandHandler(IRepository repository)

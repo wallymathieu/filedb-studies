@@ -7,7 +7,7 @@ using SomeBasicFileStoreApp.Core.Infrastructure;
 
 namespace SomeBasicFileStoreApp.Core.Commands
 {
-    public class PersistCommandsHandler:ICommandHandler<Command>
+    public class PersistCommandsHandler
     {
         private Thread thread;
         private bool stop = false;

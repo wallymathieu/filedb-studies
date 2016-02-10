@@ -40,14 +40,7 @@ namespace SomeBasicFileStoreApp.Tests
             //_container.Boot();
             _repository = _container.GetRepository();
             var commands = new GetCommands().Get();
-            var handlers = _container.GetAllHandlers();
-            foreach (var command in commands)
-            {
-                foreach (var handler in handlers.Where(h => h.CanHandle(command.GetType())))
-                {
-                    handler.Handle(command);
-                }
-            }
+            _container.HandleAll(commands);
         }
         [TestFixtureTearDown]
         public void TestFixtureTearDown()

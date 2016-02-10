@@ -3,6 +3,7 @@ using SomeBasicFileStoreApp.Core.Commands;
 using System.Linq;
 using System.Threading;
 using SomeBasicFileStoreApp.Core.Infrastructure;
+using System;
 
 namespace SomeBasicFileStoreApp.Tests
 {
@@ -18,6 +19,12 @@ namespace SomeBasicFileStoreApp.Tests
         public IEnumerable<Command[]> Batches()
         {
             return batches.ToArray();
+        }
+
+        public IEnumerable<Command> ReadAll()
+        {
+            Thread.Sleep(100);
+            return batches.SelectMany(b => b);
         }
     }
 }
