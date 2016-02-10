@@ -34,10 +34,10 @@ module GetCommands=
         use f = File.Open("TestData.xml", FileMode.Open, FileAccess.Read, FileShare.Read)
         let db = TestData.Load(f)
 
-        Array.concat(seq {
-            yield db.Customers |> Array.map toAddCustomer 
-            yield db.Orders  |> Array.map toAddOrder
-            yield db.Products |> Array.map toProduct
-            yield db.OrderProducts |> Array.map toOrderProduct
-        }) 
+        [|
+            yield! db.Customers |> Array.map toAddCustomer 
+            yield! db.Orders  |> Array.map toAddOrder
+            yield! db.Products |> Array.map toProduct
+            yield! db.OrderProducts |> Array.map toOrderProduct
+        |]
 
