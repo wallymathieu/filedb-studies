@@ -1,1 +1,1 @@
-# filedb-studies [![Build status](https://ci.appveyor.com/api/projects/status/f1qnxxw4m50itinn/branch/master?svg=true)](https://ci.appveyor.com/project/wallymathieu/filedb-studies/branch/master)
+# filedb-studies [![Build status](https://ci.appveyor.com/api/projects/status/f1qnxxw4m50itinn/branch/master?svg=true)](https://ci.appveyor.com/project/wallymathieu/filedb-studies/branch/master) [![Build Status](https://travis-ci.org/wallymathieu/filedb-studies.svg?branch=master)](https://travis-ci.org/wallymathieu/filedb-studies)
