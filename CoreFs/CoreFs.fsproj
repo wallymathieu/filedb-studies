@@ -57,7 +57,7 @@
     <Compile Include="JsonConvertCommands.fs" />
     <Compile Include="AppendBatch.fs" />
     <Compile Include="PersistCommands.fs" />
-    <Content Include="packages.config" />
+    <Content Include="paket.references" />
     <Content Include="App.config" />
   </ItemGroup>
   <ItemGroup>

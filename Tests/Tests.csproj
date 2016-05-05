@@ -64,7 +64,7 @@
     <Compile Include="PersistToDifferentThreadTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="paket.references" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestData\TestData.xml">

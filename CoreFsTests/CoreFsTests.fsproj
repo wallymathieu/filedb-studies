@@ -58,7 +58,7 @@
     <Compile Include="CustomerDataTests.fs" />
     <Compile Include="PersistToDifferentThreadTests.fs" />
     <None Include="Script.fsx" />
-    <Content Include="packages.config" />
+    <Content Include="paket.references" />
     <None Include="..\Tests\TestData\TestData.xml">
       <Link>TestData.xml</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
