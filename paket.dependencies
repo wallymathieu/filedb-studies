@@ -1,13 +1,12 @@
 source https://dotnet.myget.org/F/dotnet-core/api/v3/index.json
 source https://www.nuget.org/api/v2/
-source https://www.nuget.org/api/v2/
 framework >= net45
 
-nuget FSharp.Core 4.0.0.1
-nuget FSharp.Data 2.2.5
-nuget Newtonsoft.Json 8.0.2
+nuget FSharp.Core
+nuget FSharp.Data
+nuget Newtonsoft.Json
 nuget NUnit 2.6.4
-nuget protobuf-net 2.0.0.668
-nuget With 1.0.8
+nuget protobuf-net
+nuget With
 nuget NUnit.Runners 2.6.4
 nuget FAKE
