@@ -1,9 +1,16 @@
 ﻿namespace SomeBasicFileStoreApp
 open System
+open SomeBasicFileStoreApp.Core.Commands
 
 type IAppendBatch=
-    abstract member Batch: Command list->unit
-    abstract member ReadAll: unit-> Command list
+    abstract member Batch: Command seq->unit
+    abstract member ReadAll: unit-> Command seq
+
+open System.Runtime.CompilerServices
+[<Extension>]
+type AppendBatches =   
+    [<Extension>]   
+    static member Batch(s:IAppendBatch, commands: Command seq) = s.Batch(commands |> List.ofSeq)
 
 open System.IO
 
@@ -13,7 +20,7 @@ type JsonAppendToFile(fileName)=
         member this.Batch cs=
             use fs = File.Open(fileName, FileMode.Append, FileAccess.Write, FileShare.Read)
             use w = new StreamWriter(fs)
-            w.WriteLine(JsonConvertCommands.serialize(cs |> List.toArray))
+            w.WriteLine(JsonConvertCommands.serialize(cs |> Seq.toArray))
             fs.Flush()
 
         member this.ReadAll ()=
@@ -28,7 +35,6 @@ type JsonAppendToFile(fileName)=
                 while (null <> readLine()) do
                     yield JsonConvertCommands.deserialize<Command array>(!line)
             }
-            |> Seq.concat
             |> Seq.toList
-            
+            |> Seq.concat
             

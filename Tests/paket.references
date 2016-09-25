@@ -1,4 +1,5 @@
 Newtonsoft.Json
 NUnit
-protobuf-net
 With
+FSharp.Core
+Saithe

@@ -5,7 +5,8 @@ open System.Threading
 
 open SomeBasicFileStoreApp
 open GetCommands
-
+open SomeBasicFileStoreApp.Core.Domain
+open SomeBasicFileStoreApp.Core.Commands
 module Helpers=
 
     let inline tee fn x = x |> fn |> ignore; x
@@ -22,11 +23,11 @@ module Helpers=
 
         interface IAppendBatch with
             member this.Batch(commands)=
-                batches.Add(commands)
+                batches.Add(commands|>List.ofSeq)
                 Thread.Sleep(100)
             member this.ReadAll()=
                 Thread.Sleep(100)
-                batches |> List.concat
+                batches |> List.concat |> Seq.ofList
 
         member this.Batches()=
             batches.ToArray()

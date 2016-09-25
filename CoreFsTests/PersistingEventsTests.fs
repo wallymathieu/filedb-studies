@@ -22,7 +22,7 @@ type PersistingEventsTests() =
         let commands = getCommands()
         let _persist = JsonAppendToFile("Json_CustomerDataTests_1.db" |> tee(fun db -> dbs.Add(db))) :> IAppendBatch
         _persist.Batch(commands |> unwrap);
-        Assert.That(_persist.ReadAll() |> List.length, Is.EqualTo(commands.Length));
+        Assert.That(_persist.ReadAll() |> Seq.length, Is.EqualTo(commands.Length));
 
 
     [<Test>]
@@ -31,6 +31,6 @@ type PersistingEventsTests() =
         let _persist = JsonAppendToFile("Json_CustomerDataTests_2.db" |> tee(fun db -> dbs.Add(db))) :> IAppendBatch
         _persist.Batch(commands |> unwrap);
         let allTypes ls=
-            ls |> List.map( fun c -> c.GetType())
+            ls |> Seq.map( fun c -> c.GetType())
         Assert.That(_persist.ReadAll() |> allTypes , Is.EquivalentTo(commands |> unwrap |> allTypes));
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SomeBasicFileStoreApp.Core.Domain;
+using System;
 
 namespace SomeBasicFileStoreApp.Core.Commands
 {
@@ -12,7 +13,7 @@ namespace SomeBasicFileStoreApp.Core.Commands
 
         public void Handle(Command command)
         {
-            command.Handle(repository);
+            Commands.handle(repository, command);
         }
     }
 }

@@ -5,6 +5,8 @@ using SomeBasicFileStoreApp.Core;
 using System.Linq;
 using System;
 using System.Collections.Generic;
+using SomeBasicFileStoreApp.Core.Domain;
+
 namespace SomeBasicFileStoreApp.Tests
 {
     [TestFixture]
@@ -15,23 +17,23 @@ namespace SomeBasicFileStoreApp.Tests
         [Test]
         public void CanGetCustomerById()
         {
-            Assert.IsNotNull(_repository.GetCustomer(1));
+            Assert.IsNotNull(_repository.GetCustomer(new CustomerId(1)));
         }
 
         [Test]
         public void CanGetProductById()
         {
-            Assert.IsNotNull(_repository.GetProduct(1));
+            Assert.IsNotNull(_repository.GetProduct(new ProductId(1)));
         }
         [Test]
         public void OrderContainsProduct()
         {
-            Assert.True(_repository.GetOrder(1).Products.Any(p => p.Id == 1));
+            Assert.True(_repository.GetOrder(new OrderId( 1)).Products.Any(p => p.Id.Equals(new ProductId(1))));
         }
         [Test]
         public void OrderHasACustomer()
         {
-            Assert.IsNotNullOrEmpty(_repository.GetTheCustomerOrder(1).Firstname);
+            Assert.IsNotNullOrEmpty(_repository.GetTheCustomerOrder(new OrderId(1)).FirstName);
         }
         [TestFixtureSetUp]
         public void TestFixtureSetup()
@@ -39,8 +41,8 @@ namespace SomeBasicFileStoreApp.Tests
             _container = new ObjectContainer();
             //_container.Boot();
             _repository = _container.GetRepository();
-            var commands = new GetCommands().Get();
-            _container.HandleAll(commands);
+            var commands = CoreFsTests.GetCommands.Get().ToArray();
+            _container.HandleAll(commands.Select(c=>c.Command));
         }
         [TestFixtureTearDown]
         public void TestFixtureTearDown()

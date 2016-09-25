@@ -1,23 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using SomeBasicFileStoreApp.Core;
 using SomeBasicFileStoreApp.Core.Commands;
-using System.Linq;
+using SomeBasicFileStoreApp.Core.Domain;
 
 namespace SomeBasicFileStoreApp.Tests
 {
     internal class ObjectContainer : IDisposable
     {
-        private CommandHandler[] handlers;
-        private PersistCommandsHandler _persistToFile;
+        private HandleCommand[] handlers;
+        private PersistCommands _persistToFile;
         private readonly IRepository _repository = new Repository();
         private readonly FakeAppendToFile _fakeAppendToFile;
 
         public ObjectContainer()
         {
             _fakeAppendToFile = new FakeAppendToFile();
-            _persistToFile = new PersistCommandsHandler(_fakeAppendToFile);
-            handlers = new CommandHandler[] {
+            _persistToFile = new PersistCommands(_fakeAppendToFile);
+            handlers = new HandleCommand[] {
                 new RepositoryCommandHandler(_repository).Handle,
                 _persistToFile.Handle
             };

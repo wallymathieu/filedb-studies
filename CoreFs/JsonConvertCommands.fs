@@ -2,6 +2,7 @@
 open System
 open Newtonsoft.Json
 open System.Runtime.Serialization
+open SomeBasicFileStoreApp.Core.Commands
 
 module JsonConvertCommands=
     type ShortNameSerializationBinder(type':Type)=
@@ -33,8 +34,9 @@ module JsonConvertCommands=
     settings.TypeNameHandling <- TypeNameHandling.Auto
     settings.Binder <- _binder
 
+    [<CompiledName("Deserialize")>]
     let deserialize<'T> v=
         JsonConvert.DeserializeObject<'T>(v, settings);
-
+    [<CompiledName("Serialize")>]
     let serialize obj=
         JsonConvert.SerializeObject(obj, settings);

@@ -1,3 +1,4 @@
+redirects: on
 source https://dotnet.myget.org/F/dotnet-core/api/v3/index.json
 source https://www.nuget.org/api/v2/
 framework >= net45
@@ -6,7 +7,7 @@ nuget FSharp.Core
 nuget FSharp.Data
 nuget Newtonsoft.Json
 nuget NUnit 2.6.4
-nuget protobuf-net
 nuget With
 nuget NUnit.Runners 2.6.4
 nuget FAKE
+nuget Saithe

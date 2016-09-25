@@ -8,6 +8,7 @@ open System.Collections.Generic
 open SomeBasicFileStoreApp
 open Helpers
 open GetCommands
+open SomeBasicFileStoreApp.Core.Domain
 
 [<TestFixture>]
 type CustomerDataTests()=
@@ -26,16 +27,16 @@ type CustomerDataTests()=
 
     [<Test>]
     member this.CanGetCustomerById()=
-        Assert.IsNotNull(_repository.GetCustomer(1))
+        Assert.IsNotNull(_repository.GetCustomer(CustomerId( 1)))
 
     [<Test>]
     member this.CanGetProductById()=
-        Assert.IsNotNull(_repository.GetProduct(1))
+        Assert.IsNotNull(_repository.GetProduct(ProductId(1)))
 
     [<Test>]
     member this.OrderContainsProduct()=
-        let order = _repository.GetOrder(1)
-        Assert.True(order.Products |> List.tryFind( fun p -> p.Id = 1) |> Option.isSome)
+        let order = _repository.GetOrder(OrderId(1))
+        Assert.True(order.Products |> List.tryFind( fun p -> p.Id = ProductId(1)) |> Option.isSome)
 
     //[<Test>]
     //member this.OrderHasACustomer()=

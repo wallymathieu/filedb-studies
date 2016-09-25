@@ -1,13 +1,14 @@
-﻿namespace SomeBasicFileStoreApp
+﻿namespace SomeBasicFileStoreApp.Core.Commands
+open SomeBasicFileStoreApp.Core.Domain
 open System
-
 
 type Command = 
     | Empty
-    | AddCustomerCommand of id:int * version:int * firstName:string * lastName:string
-    | AddOrderCommand of id:int * version:int * customer:int * orderDate:DateTime
-    | AddProductCommand of id:int * version:int * name:string * cost:decimal
-    | AddProductToOrder of orderId:int * productId:int
+    | AddCustomerCommand of id:CustomerId * version:int * firstName:string * lastName:string
+    | AddOrderCommand of id:OrderId * version:int * customer:CustomerId * orderDate:DateTime
+    | AddProductCommand of id:ProductId * version:int * name:string * cost:float
+    | AddProductToOrder of orderId:OrderId * productId:ProductId
+
 
 module Commands=
     let handle (repository:IRepository) command=
@@ -24,7 +25,7 @@ module Commands=
                                                Id=id
                                                OrderDate=orderDate
                                                Version=version
-                                               Customer= repository.GetCustomer(customer)
+                                               Customer= customer
                                                Products=List.empty
                                              }))
             | AddProductCommand(id=id; version=version; name=name; cost=cost)-> 

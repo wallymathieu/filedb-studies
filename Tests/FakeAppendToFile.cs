@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using SomeBasicFileStoreApp.Core.Commands;
 using System.Linq;
 using System.Threading;
-using SomeBasicFileStoreApp.Core.Infrastructure;
-using System;
 
 namespace SomeBasicFileStoreApp.Tests
 {
