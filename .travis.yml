@@ -1,6 +1,9 @@
 language: csharp
-
+dotnet: 2.1.301
 sudo: false 
 
 script: 
-  - bash ./build.sh test
+  - bash ./build.sh 
+branches:
+  only: 
+    - master

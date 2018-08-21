@@ -1,18 +1,18 @@
-﻿using NUnit.Framework;
+﻿using System;
 using System.IO;
 using System.Linq;
 using With;
 using SomeBasicFileStoreApp.Core.Infrastructure.Json;
 using System.Collections.Generic;
+using With.Collections;
+using Xunit;
 
 namespace SomeBasicFileStoreApp.Tests.Json
 {
-    [TestFixture]
-    public class PersistingEventsTests
+    public class PersistingEventsTests:IDisposable
     {
         private List<string> dbs = new List<string>();
-        [TearDown]
-        public void TearDown()
+        public void Dispose()
         {
             foreach (var db in dbs)
             {
@@ -20,37 +20,37 @@ namespace SomeBasicFileStoreApp.Tests.Json
             }
         }
 
-        [Test]
+        [Fact]
         public void Read_items_persisted_in_separate_batches()
         {
             var commands = new GetCommands().Get().ToArray();
             var _persist = new AppendToFile("Json_CustomerDataTests_1.db".Tap(db => dbs.Add(db)));
             var batches = commands.BatchesOf(3).ToArray();
             // in order for the test to be valid
-            Assert.That(batches.Length, Is.GreaterThan(2));
+            Assert.True(batches.Length>2, "batches.Length>2");
             foreach (var batch in batches)
             {
                 _persist.Batch(batch);
             }
-            Assert.That(_persist.ReadAll().Count(), Is.EqualTo(commands.Length));
+            Assert.Equal(_persist.ReadAll().Count(), commands.Length);
         }
 
-        [Test]
+        [Fact]
         public void Read_items_persisted_in_single_batch()
         {
             var commands = new GetCommands().Get().ToArray();
             var _persist = new AppendToFile("Json_CustomerDataTests_2.db".Tap(db => dbs.Add(db)));
             _persist.Batch(commands);
-            Assert.That(_persist.ReadAll().Count(), Is.EqualTo(commands.Length));
+            Assert.Equal(_persist.ReadAll().Count(), commands.Length);
         }
 
-        [Test]
+        [Fact]
         public void Read_items()
         {
             var commands = new GetCommands().Get().ToArray();
             var _persist = new AppendToFile("Json_CustomerDataTests_3.db".Tap(db => dbs.Add(db)));
             _persist.Batch(commands);
-            Assert.That(_persist.ReadAll().Select(c => c.GetType()).ToArray(), Is.EquivalentTo(commands.Select(c => c.GetType()).ToArray()));
+            Assert.Equal(_persist.ReadAll().Select(c => c.GetType()).ToArray(), commands.Select(c => c.GetType()).ToArray());
         }
     }
 }

@@ -1,18 +1,16 @@
-using NUnit.Framework;
 using System.Linq;
 using SomeBasicFileStoreApp.Core.Commands;
-using With.Linq;
+using With.Collections;
+using Xunit;
 
 namespace SomeBasicFileStoreApp.Tests
 {
 
-    [TestFixture]
     public class PersistToDifferentThreadTests
     {
-        private Command[][] _batches;
-        private Command[] _commandsSent;
-        [TestFixtureSetUp]
-        public void TestFixtureSetUp()
+        private static Command[][] _batches;
+        private static Command[] _commandsSent;
+        static PersistToDifferentThreadTests()
         {
             var container = new ObjectContainer();
             container.Boot();
@@ -22,20 +20,19 @@ namespace SomeBasicFileStoreApp.Tests
             _batches = container.BatchesPersisted().ToArray();
         }
 
-        [Test]
+        [Fact]
         public void Will_send_all_commands_to_the_different_thread()
         {
-            Assert.That(_batches.Count(), Is.LessThanOrEqualTo(_commandsSent.Count()));
-            Assert.That(_batches.SelectMany(b=>b).Count(), Is.EqualTo(_commandsSent.Count()));
+            Assert.True(_batches.Count()<=_commandsSent.Count(), "_batches.Count()<=_commandsSent.Count()");
+            Assert.True(_batches.SelectMany(b=>b).Count()== _commandsSent.Count(), "_batches.SelectMany(b=>b).Count()== _commandsSent.Count()");
         }
 
-        [Test]
+        [Fact]
         public void Order()
         {
             _batches.SelectMany(b => b).Pairwise(((last, current) =>
             {
-                Assert.That(current.SequenceNumber,
-                    Is.GreaterThan(last.SequenceNumber));
+                Assert.True(current.SequenceNumber>last.SequenceNumber, "current.SequenceNumber>last.SequenceNumber");
                 return "Success";
             })).ToArray();
 
