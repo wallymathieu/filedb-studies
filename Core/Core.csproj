@@ -11,5 +11,6 @@
     <PackageReference Include="FSharp.Core" Version="4.5.2" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="With" Version="5.*" />
+    <PackageReference Include="protobuf-net" Version="2.3.17" />
   </ItemGroup>
 </Project>
