@@ -62,6 +62,8 @@ packages/
 
 # FAKE - F# Make
 .fake/
+# Jetbrains
+.idea/
 
 # Test result
 TestResults.xml
