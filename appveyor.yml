@@ -1,3 +1,6 @@
 image: Visual Studio 2017
 build_script:
   - build.cmd 
+branches:
+  only: 
+    - master

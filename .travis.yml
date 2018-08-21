@@ -4,3 +4,6 @@ sudo: false
 
 script: 
   - bash ./build.sh 
+branches:
+  only: 
+    - master
