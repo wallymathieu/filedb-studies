@@ -8,9 +8,8 @@
     <RootNamespace>SomeBasicFileStoreApp.Core</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="FSharp.Core" Version="4.3.*" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.*" />
-    <PackageReference Include="protobuf-net" Version="2.*" />
+    <PackageReference Include="FSharp.Core" Version="4.5.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="With" Version="5.*" />
   </ItemGroup>
 </Project>

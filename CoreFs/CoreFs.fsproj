@@ -14,5 +14,6 @@
     <Content Include="App.config" />
     <PackageReference Include="FSharp.Core" Version="4.3.4" />
     <PackageReference Include="Newtonsoft.Json" Version="11.*" />
+    <PackageReference Update="FSharp.Core" Version="4.5.2" />
   </ItemGroup>
 </Project>
