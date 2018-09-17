@@ -29,18 +29,20 @@ namespace SomeBasicFileStoreApp.Core.Infrastructure.Json
         }
         public class ShortNameSerializationBinder : SerializationBinder
         {
-            private readonly Type type;
-            private readonly IDictionary<string, Type> types;
+            private readonly Type _type;
+            private readonly IDictionary<string, Type> _types;
 
             public ShortNameSerializationBinder(Type type)
             {
-                this.type = type;
-                this.types = type.Assembly.GetTypes().Where(t => type.IsAssignableFrom(t)).ToDictionary(t => t.Name, t => t);
+                _type = type;
+                _types = type.Assembly.GetTypes()
+                    .Where(type.IsAssignableFrom)
+                    .ToDictionary(t => t.Name, t => t);
             }
 
             public override void BindToName(Type serializedType, out string assemblyName, out string typeName)
             {
-                if (this.type.IsAssignableFrom(serializedType))
+                if (_type.IsAssignableFrom(serializedType))
                 {
                     assemblyName = null;
                     typeName = serializedType.Name;
@@ -54,14 +56,12 @@ namespace SomeBasicFileStoreApp.Core.Infrastructure.Json
 
             public override Type BindToType(string assemblyName, string typeName)
             {
-                if (assemblyName == null)
+                if (_types.ContainsKey(typeName))
                 {
-                    if (types.ContainsKey(typeName))
-                    {
-                        return types[typeName];
-                    }
+                    return _types[typeName];
                 }
-                return Type.GetType(string.Format("{0}, {1}", typeName, assemblyName), true);
+
+                return Type.GetType($"{typeName}, {assemblyName}", true);
             }
         }
     }

@@ -9,9 +9,9 @@ namespace SomeBasicFileStoreApp.Core.Commands
 {
     public class PersistCommandsHandler
     {
-        private Thread thread;
-        private bool stop = false;
-        private readonly ConcurrentQueue<Command> Commands = new ConcurrentQueue<Command>();
+        private Thread _thread;
+        private bool _stop = false;
+        private readonly ConcurrentQueue<Command> _commands = new ConcurrentQueue<Command>();
         private readonly IAppendBatch _appendBatch;
         private EventWaitHandle signal;
 
@@ -23,17 +23,17 @@ namespace SomeBasicFileStoreApp.Core.Commands
 
         public void Start()
         {
-            if (thread != null)
+            if (_thread != null)
             {
                 throw new Exception();
             }
-            thread = new Thread(ThreadStart);
-            thread.Start();
+            _thread = new Thread(ThreadStart);
+            _thread.Start();
         }
 
         private void ThreadStart()
         {
-            while (!stop)
+            while (!_stop)
             {
                 signal.WaitOne();
                 AppendBatch();
@@ -47,8 +47,7 @@ namespace SomeBasicFileStoreApp.Core.Commands
         { 
             var commands = new List<Command>();
 
-            Command command;
-            while (Commands.TryDequeue(out command))
+            while (_commands.TryDequeue(out var command))
             {
                 commands.Add(command);
             }
@@ -61,19 +60,16 @@ namespace SomeBasicFileStoreApp.Core.Commands
 
         public void Stop()
         {
-            stop = true;
+            _stop = true;
             signal.Set();
 
-            if (thread != null)
-            {
-                thread.Join();
-            }
+            _thread?.Join();
         }
 
         public void Handle(Command command)
         {
             // send the command to separate thread and persist it
-            Commands.Enqueue(command);
+            _commands.Enqueue(command);
             signal.Set();
         }
     }
