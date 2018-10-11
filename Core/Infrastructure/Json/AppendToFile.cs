@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using SomeBasicFileStoreApp.Core.Commands;
 namespace SomeBasicFileStoreApp.Core.Infrastructure.Json
 {
@@ -14,29 +16,28 @@ namespace SomeBasicFileStoreApp.Core.Infrastructure.Json
             _converter = new JsonConvertCommands();
         }
 
-        public virtual void Batch(IEnumerable<Command> commands)
+        public virtual async Task Batch(IEnumerable<Command> commands)
         {
             using (var fs = File.Open(_filename, FileMode.Append, FileAccess.Write, FileShare.Read))
             using (var w = new StreamWriter(fs))
             {
                 w.WriteLine(_converter.Serialize(commands));
-                fs.Flush();
+                await fs.FlushAsync();
             }
         }
 
-        public virtual IEnumerable<Command> ReadAll()
+        public virtual async Task<IEnumerable<Command>> ReadAll()
         {
             using (var fs = File.Open(_filename, FileMode.Open, FileAccess.Read, FileShare.Read))
             using (var r = new StreamReader(fs))
             {
+                var commands = new List<Command>();
                 string line;
-                while (null != (line = r.ReadLine()))
+                while (null != (line = await r.ReadLineAsync()))
                 {
-                    foreach (var command in _converter.Deserialize<IEnumerable<Command>>(line))
-                    {
-                        yield return command;
-                    }
+                    commands.AddRange(_converter.Deserialize<IEnumerable<Command>>(line));
                 }
+                return commands;
             }
         }
     }

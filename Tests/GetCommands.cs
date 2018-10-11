@@ -47,8 +47,7 @@ namespace SomeBasicFileStoreApp.Tests
 
             import.ParseConnections("OrderProduct", "Product", "Order", (productId, orderId) =>
             {
-                var obj = new AddProductToOrder { ProductId = productId, OrderId = orderId };
-                obj.SequenceNumber = ++sequence;
+                var obj = new AddProductToOrderCommand{ProductId= productId, OrderId= orderId,SequenceNumber = ++sequence};
                 commands.Add(obj);
             });
 

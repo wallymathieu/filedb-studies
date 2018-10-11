@@ -3,6 +3,7 @@ using System.Threading;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using SomeBasicFileStoreApp.Core.Infrastructure;
 
 namespace SomeBasicFileStoreApp.Core.Commands
@@ -12,10 +13,10 @@ namespace SomeBasicFileStoreApp.Core.Commands
         private Thread _thread;
         private bool _stop = false;
         private readonly ConcurrentQueue<Command> _commands = new ConcurrentQueue<Command>();
-        private readonly IAppendBatch _appendBatch;
+        private readonly IEnumerable<IAppendBatch> _appendBatch;
         private EventWaitHandle signal;
 
-        public PersistCommandsHandler(IAppendBatch appendBatch)
+        public PersistCommandsHandler(IEnumerable<IAppendBatch> appendBatch)
         {
             _appendBatch = appendBatch;
             signal = new EventWaitHandle(false, EventResetMode.AutoReset);
@@ -36,14 +37,14 @@ namespace SomeBasicFileStoreApp.Core.Commands
             while (!_stop)
             {
                 signal.WaitOne();
-                AppendBatch();
+                AppendBatch().Wait();
             }
             // While the batch has been running, more commands might have been added
             // and stop might have been called
-            AppendBatch();
+            AppendBatch().Wait();
         }
 
-        private void AppendBatch()
+        private async Task AppendBatch()
         { 
             var commands = new List<Command>();
 
@@ -54,7 +55,10 @@ namespace SomeBasicFileStoreApp.Core.Commands
 
             if (commands.Any())
             {
-                _appendBatch.Batch(commands);
+                foreach (var appendBatch in _appendBatch)
+                {
+                    await appendBatch.Batch(commands);
+                }
             }
         }
 
@@ -71,6 +75,11 @@ namespace SomeBasicFileStoreApp.Core.Commands
             // send the command to separate thread and persist it
             _commands.Enqueue(command);
             signal.Set();
+        }
+
+        public Task<IEnumerable<Command>> YieldStored()
+        {
+            return _appendBatch.FirstOrDefault()?.ReadAll();
         }
     }
 }

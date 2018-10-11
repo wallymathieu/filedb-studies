@@ -11,6 +11,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CoreFs", "CoreFs\CoreFs.fsp
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CoreFsTests", "CoreFsTests\CoreFsTests.fsproj", "{93A52B97-9DAE-4662-96A2-3D94B0A7BE37}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "Web\Web.csproj", "{7DA5BF37-1EF5-4747-A3C4-825FF85BDCEB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{93A52B97-9DAE-4662-96A2-3D94B0A7BE37}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93A52B97-9DAE-4662-96A2-3D94B0A7BE37}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{93A52B97-9DAE-4662-96A2-3D94B0A7BE37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DA5BF37-1EF5-4747-A3C4-825FF85BDCEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DA5BF37-1EF5-4747-A3C4-825FF85BDCEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DA5BF37-1EF5-4747-A3C4-825FF85BDCEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DA5BF37-1EF5-4747-A3C4-825FF85BDCEB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

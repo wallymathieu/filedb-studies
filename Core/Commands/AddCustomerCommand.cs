@@ -6,21 +6,26 @@ namespace SomeBasicFileStoreApp.Core.Commands
     public class AddCustomerCommand : Command
     {
         [ProtoMember(1)]
-        public virtual int Id { get; private set; }
+        public virtual int Id { get; set; }
 
         [ProtoMember(2)]
-        public virtual int Version { get; private set; }
+        public virtual int Version { get; set; }
 
         [ProtoMember(3)]
-        public virtual string Firstname { get; private set; }
+        public virtual string Firstname { get; set; }
 
         [ProtoMember(4)]
-        public virtual string Lastname { get; private set; }
+        public virtual string Lastname { get; set; }
 
-        public override void Handle(IRepository _repository)
+        public override bool Handle(IRepository repository)
         {
-            var command = this;
-            _repository.Save(new Customer(command.Id, command.Firstname, command.Lastname, command.Version));
+            var customer = repository.GetCustomer(Id);
+            if (customer == null)
+            {
+                repository.Save(new Customer(Id, Firstname, Lastname, Version));
+                return true;
+            }
+            return false;
         }
     }
 }

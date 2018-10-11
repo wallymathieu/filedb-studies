@@ -12,11 +12,11 @@ namespace SomeBasicFileStoreApp.Core
             Version = version;
         }
 
-        public virtual int Id { get; private set; }
-        public virtual string Firstname { get; private set; }
+        public virtual int Id { get; }
+        public virtual string Firstname { get; }
 
-        public virtual string Lastname { get; private set; }
+        public virtual string Lastname { get; }
 
-        public virtual int Version { get; private set; }
+        public virtual int Version { get; }
     }
 }

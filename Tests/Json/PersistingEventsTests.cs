@@ -4,6 +4,7 @@ using System.Linq;
 using With;
 using SomeBasicFileStoreApp.Core.Infrastructure.Json;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using With.Collections;
 using Xunit;
 
@@ -21,7 +22,7 @@ namespace SomeBasicFileStoreApp.Tests.Json
         }
 
         [Fact]
-        public void Read_items_persisted_in_separate_batches()
+        public async Task Read_items_persisted_in_separate_batches()
         {
             var commands = new GetCommands().Get().ToArray();
             var _persist = new AppendToFile("Json_CustomerDataTests_1.db".Tap(db => dbs.Add(db)));
@@ -30,27 +31,31 @@ namespace SomeBasicFileStoreApp.Tests.Json
             Assert.True(batches.Length>2, "batches.Length>2");
             foreach (var batch in batches)
             {
-                _persist.Batch(batch);
+                await _persist.Batch(batch);
             }
-            Assert.Equal(_persist.ReadAll().Count(), commands.Length);
+
+            var all = await _persist.ReadAll();
+            Assert.Equal(all.Count(), commands.Length);
         }
 
         [Fact]
-        public void Read_items_persisted_in_single_batch()
+        public async Task Read_items_persisted_in_single_batch()
         {
             var commands = new GetCommands().Get().ToArray();
             var _persist = new AppendToFile("Json_CustomerDataTests_2.db".Tap(db => dbs.Add(db)));
-            _persist.Batch(commands);
-            Assert.Equal(_persist.ReadAll().Count(), commands.Length);
+            await _persist.Batch(commands);
+            var all = await _persist.ReadAll();
+            Assert.Equal(all.Count(), commands.Length);
         }
 
         [Fact]
-        public void Read_items()
+        public async Task Read_items()
         {
             var commands = new GetCommands().Get().ToArray();
             var _persist = new AppendToFile("Json_CustomerDataTests_3.db".Tap(db => dbs.Add(db)));
-            _persist.Batch(commands);
-            Assert.Equal(_persist.ReadAll().Select(c => c.GetType()).ToArray(), commands.Select(c => c.GetType()).ToArray());
+            await _persist.Batch(commands);
+            var all = await _persist.ReadAll();
+            Assert.Equal(all.Select(c => c.GetType()).ToArray(), commands.Select(c => c.GetType()).ToArray());
         }
     }
 }

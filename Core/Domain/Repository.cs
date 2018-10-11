@@ -13,6 +13,22 @@ namespace SomeBasicFileStoreApp.Core
         {
             _customers[obj.Id] = obj;
         }
+
+        public IEnumerable<Customer> GetCustomers()
+        {
+            return _customers.Values;
+        }
+
+        public IEnumerable<Order> GetOrders()
+        {
+            return _orders.Values;
+        }
+
+        public IEnumerable<Product> GetProducts()
+        {
+            return _products.Values;
+        }
+
         public void Save(Product obj)
         {
             _products[obj.Id] = obj;
@@ -21,37 +37,20 @@ namespace SomeBasicFileStoreApp.Core
         {
             _orders[obj.Id] = obj;
         }
-        public IEnumerable<Customer> QueryOverCustomers()
+
+        public Customer GetCustomer(int customerId)
         {
-            return _customers.Values;
-        }
-        public IEnumerable<Order> QueryOverOrders()
-        {
-            return _orders.Values;
+            return _customers[customerId];
         }
 
-        public Customer GetCustomer(int v)
+        public Product GetProduct(int productId)
         {
-            return _customers[v];
-        }
-        public IEnumerable<Product> QueryOverProducts()
-        {
-            return _products.Values;
+            return _products[productId];
         }
 
-        public Product GetProduct(int v)
+        public Order GetOrder(int orderId)
         {
-            return _products[v];
-        }
-
-        public Order GetOrder(int v)
-        {
-            return _orders[v];
-        }
-
-        public Customer GetTheCustomerOrder(int v)
-        {
-            return _customers[_orders[v].Customer];
+            return _orders[orderId];
         }
     }
 }

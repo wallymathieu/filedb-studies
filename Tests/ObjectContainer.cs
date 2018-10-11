@@ -16,7 +16,7 @@ namespace SomeBasicFileStoreApp.Tests
         public ObjectContainer()
         {
             _fakeAppendToFile = new FakeAppendToFile();
-            _persistToFile = new PersistCommandsHandler(_fakeAppendToFile);
+            _persistToFile = new PersistCommandsHandler(new []{_fakeAppendToFile});
             handlers = new CommandHandler[] {
                 c => c.Handle(_repository),
                 _persistToFile.Handle
