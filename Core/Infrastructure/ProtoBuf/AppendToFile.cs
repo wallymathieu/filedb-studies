@@ -8,16 +8,16 @@ namespace SomeBasicFileStoreApp.Core.Infrastructure.ProtoBuf
 {
     public class AppendToFile : Model, IAppendBatch
     {
-        private string v;
+        private readonly string _filename;
 
-        public AppendToFile(string v)
+        public AppendToFile(string filename)
         {
-            this.v = v;
+            this._filename = filename;
         }
 
         public virtual async Task Batch(IEnumerable<Command> commands)
         {
-            using (var fs = File.Open(v, FileMode.Append, FileAccess.Write, FileShare.Read))
+            using (var fs = File.Open(_filename, FileMode.Append, FileAccess.Write, FileShare.Read))
             {
                 Serializer.Serialize(fs, commands);
                 await fs.FlushAsync();
@@ -26,7 +26,7 @@ namespace SomeBasicFileStoreApp.Core.Infrastructure.ProtoBuf
 
         public virtual Task<IEnumerable<Command>> ReadAll()
         {
-            using (var fs = File.Open(v, FileMode.Open, FileAccess.Read, FileShare.Read))
+            using (var fs = File.Open(_filename, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
                 return Task.FromResult(Serializer.Deserialize<IEnumerable<Command>>(fs));
             }
