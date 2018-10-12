@@ -2,6 +2,7 @@
 open System
 open System.Collections.Generic
 open System.Threading
+open System.Threading.Tasks
 
 open SomeBasicFileStoreApp
 open GetCommands
@@ -10,23 +11,21 @@ module Helpers=
 
     let inline tee fn x = x |> fn |> ignore; x
 
-
     let unwrap commands =
         commands
             |> Array.map WithSeqenceNumber.getCommand 
             |> Array.toList 
-
 
     type FakeAppendToFile ()=
         let batches = new List<Command list>();
 
         interface IAppendBatch with
             member this.Batch(commands)=
-                batches.Add(commands)
-                Thread.Sleep(100)
+                Task.Delay(100)
+                    .ContinueWith<unit>(fun r-> batches.Add(commands))
             member this.ReadAll()=
-                Thread.Sleep(100)
-                batches |> List.concat
+                Task.Delay(100)
+                    .ContinueWith(fun r-> batches |> List.concat)
 
         member this.Batches()=
             batches.ToArray()
@@ -48,7 +47,7 @@ module Helpers=
         
         member this.Boot()=
             _persistToFile.Start()
-        
+
         member this.GetRepository (): IRepository=
             _repository :> IRepository
 
@@ -56,7 +55,6 @@ module Helpers=
             let hs = handlers()
             let handle command = 
                 hs |> List.iter (fun h-> h.Invoke(command))
-
             cs |> List.iter handle
 
         member this.BatchesPersisted()=

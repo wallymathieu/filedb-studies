@@ -12,6 +12,7 @@
     <Compile Include="AppendBatch.fs" />
     <Compile Include="PersistCommands.fs" />
     <Content Include="App.config" />
+    <PackageReference Include="FSharpx.Extras" Version="2.2.1" />
     <PackageReference Include="FSharp.Core" Version="4.3.4" />
     <PackageReference Include="Newtonsoft.Json" Version="11.*" />
     <PackageReference Update="FSharp.Core" Version="4.5.2" />
