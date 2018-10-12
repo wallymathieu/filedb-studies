@@ -19,8 +19,7 @@ namespace SomeBasicFileStoreApp.Core.Commands
 
         public override bool Handle(IRepository repository)
         {
-            var customer = repository.GetCustomer(Id);
-            if (customer == null)
+            if (!repository.TryGetCustomer(Id, out _))
             {
                 repository.Save(new Customer(Id, Firstname, Lastname, Version));
                 return true;

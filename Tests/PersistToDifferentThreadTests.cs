@@ -15,7 +15,7 @@ namespace SomeBasicFileStoreApp.Tests
             var container = new ObjectContainer();
             container.Boot();
             _commandsSent = new GetCommands().Get().ToArray();
-            container.HandleAll(_commandsSent);
+            container.PersistAll(_commandsSent);
             container.Dispose();
             _batches = container.BatchesPersisted().ToArray();
         }
@@ -23,8 +23,9 @@ namespace SomeBasicFileStoreApp.Tests
         [Fact]
         public void Will_send_all_commands_to_the_different_thread()
         {
-            Assert.True(_batches.Count()<=_commandsSent.Count(), "_batches.Count()<=_commandsSent.Count()");
-            Assert.True(_batches.SelectMany(b=>b).Count()== _commandsSent.Count(), "_batches.SelectMany(b=>b).Count()== _commandsSent.Count()");
+            Assert.True(_batches.Length<=_commandsSent.Length, "_batches.Count()<=_commandsSent.Count()");
+            Assert.True(_batches.SelectMany(b=>b).Count()== _commandsSent.Count(), 
+                "_batches.SelectMany(b=>b).Count()== _commandsSent.Count()");
         }
 
         [Fact]
@@ -35,10 +36,6 @@ namespace SomeBasicFileStoreApp.Tests
                 Assert.True(current.SequenceNumber>last.SequenceNumber, "current.SequenceNumber>last.SequenceNumber");
                 return "Success";
             })).ToArray();
-
-              ;
-            //Console.WriteLine(string.Join(", ",
-            //    _batches.Select(b => "["+string.Join(", ", b.Select(a => a.SequenceNumber)) +"]" )));
         }
     }
 }

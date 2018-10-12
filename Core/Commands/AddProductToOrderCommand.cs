@@ -18,9 +18,8 @@ namespace SomeBasicFileStoreApp.Core.Commands
 
         public override bool Handle(IRepository repository)
         {
-            var order = repository.GetOrder(OrderId);
-            var product = repository.GetProduct(ProductId);
-            if (order == null || product == null) return false;
+            if (!repository.TryGetOrder(OrderId, out var order) 
+                || !repository.TryGetProduct(ProductId, out var product)) return false;
             repository.Save(UpdateProducts.Copy(order,
                 order.Products.ToList().Tap(o=> o.Add(product))));
             return true;

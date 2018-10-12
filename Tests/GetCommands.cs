@@ -25,16 +25,6 @@ namespace SomeBasicFileStoreApp.Tests
                 {
                     throw new Exception(string.Format("ignoring property {1} on {0}", type, property.PropertyType.Name));
                 });
-            import.Parse<AddOrderCommand>("Order",
-                (obj) =>
-                {
-                    obj.SequenceNumber = ++sequence;
-                    commands.Add(obj);
-                }, onIgnore: (type, property) =>
-                {
-                    throw new Exception(string.Format("ignoring property {1} on {0}", type, property.PropertyType.Name));
-                });
-
             import.Parse<AddProductCommand>("Product",
                 (obj) =>
                 {
@@ -44,7 +34,15 @@ namespace SomeBasicFileStoreApp.Tests
                 {
                     throw new Exception(string.Format("ignoring property {1} on {0}", type, property.PropertyType.Name));
                 });
-
+            import.Parse<AddOrderCommand>("Order",
+                (obj) =>
+                {
+                    obj.SequenceNumber = ++sequence;
+                    commands.Add(obj);
+                }, onIgnore: (type, property) =>
+                {
+                    throw new Exception(string.Format("ignoring property {1} on {0}", type, property.PropertyType.Name));
+                });
             import.ParseConnections("OrderProduct", "Product", "Order", (productId, orderId) =>
             {
                 var obj = new AddProductToOrderCommand{ProductId= productId, OrderId= orderId,SequenceNumber = ++sequence};

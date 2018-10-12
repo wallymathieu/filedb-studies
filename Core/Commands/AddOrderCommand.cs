@@ -17,9 +17,8 @@ namespace SomeBasicFileStoreApp.Core.Commands
        
         public override bool Handle(IRepository repository)
         {
-            var customer = repository.GetCustomer(Customer);
-            var order = repository.GetOrder(Id);
-            if (customer != null && order==null)
+            if (repository.TryGetCustomer(Customer, out var customer)
+                && !repository.TryGetOrder(Id, out _))
             {
                 repository.Save(new Order(Id, customer, OrderDate, new Product[0], Version));
                 return true;

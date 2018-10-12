@@ -33,24 +33,19 @@ namespace SomeBasicFileStoreApp.Core
         {
             _products[obj.Id] = obj;
         }
+
         public void Save(Order obj)
         {
             _orders[obj.Id] = obj;
         }
 
-        public Customer GetCustomer(int customerId)
-        {
-            return _customers[customerId];
-        }
+        public bool TryGetCustomer(int customerId, out Customer customer) =>
+            _customers.TryGetValue(customerId, out customer);
 
-        public Product GetProduct(int productId)
-        {
-            return _products[productId];
-        }
+        public bool TryGetProduct(int productId, out Product product) =>
+            _products.TryGetValue(productId, out product);
 
-        public Order GetOrder(int orderId)
-        {
-            return _orders[orderId];
-        }
+        public bool TryGetOrder(int orderId, out Order order) =>
+            _orders.TryGetValue(orderId, out order);
     }
 }

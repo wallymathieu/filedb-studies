@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using SomeBasicFileStoreApp.Core;
 using SomeBasicFileStoreApp.Core.Commands;
-using System.Linq;
+using Newtonsoft.Json;
 
 namespace SomeBasicFileStoreApp.Tests
 {
     internal class ObjectContainer : IDisposable
     {
-        private CommandHandler[] handlers;
         private PersistCommandsHandler _persistToFile;
         private readonly IRepository _repository = new Repository();
         private readonly FakeAppendToFile _fakeAppendToFile;
@@ -17,10 +16,6 @@ namespace SomeBasicFileStoreApp.Tests
         {
             _fakeAppendToFile = new FakeAppendToFile();
             _persistToFile = new PersistCommandsHandler(new []{_fakeAppendToFile});
-            handlers = new CommandHandler[] {
-                c => c.Handle(_repository),
-                _persistToFile.Handle
-            };
         }
 
         public void Boot()
@@ -43,14 +38,18 @@ namespace SomeBasicFileStoreApp.Tests
             return _fakeAppendToFile.Batches();
         }
 
+        public void PersistAll(IEnumerable<Command> commands)
+        {
+            foreach (var command in commands)
+                _persistToFile.Handle(command);
+        }
+
         public void HandleAll(IEnumerable<Command> commands)
         {
             foreach (var command in commands)
             {
-                foreach (var handler in handlers)
-                {
-                    handler.Invoke(command);
-                }
+                var r = command.Handle(_repository);
+                if (!r) throw new Exception("Could not handle "+JsonConvert.SerializeObject(command));
             }
         }
     }

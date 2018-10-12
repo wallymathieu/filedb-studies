@@ -16,7 +16,7 @@ namespace SomeBasicFileStoreApp.Core.Commands
     
         public override bool Handle(IRepository repository)
         {
-            if (repository.GetProduct(Id)==null)
+            if (!repository.TryGetProduct(Id, out _))
             {
                 repository.Save(new Product(Id, Cost, Name, Version));
                 return true;
