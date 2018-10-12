@@ -8,14 +8,14 @@ type IAppendBatch=
     abstract member ReadAll: unit-> Task<Command list>
 
 open System.IO
-
+open Json.Commands
 type JsonAppendToFile(fileName)=
     interface IAppendBatch with
 
         member this.Batch cs= task {
             use fs = File.Open(fileName, FileMode.Append, FileAccess.Write, FileShare.Read)
             use w = new StreamWriter(fs)
-            w.WriteLine(JsonConvertCommands.serialize(cs |> List.toArray))
+            w.WriteLine(serialize(cs |> List.toArray))
             do! fs.FlushAsync().ContinueWith<unit>( fun _ -> () )
         }
         member this.ReadAll ()=
@@ -28,7 +28,7 @@ type JsonAppendToFile(fileName)=
                     !line
 
                 while (null <> readLine()) do
-                    yield JsonConvertCommands.deserialize<Command array>(!line)
+                    yield deserialize(!line)
             }
             |> Seq.concat
             |> Seq.toList

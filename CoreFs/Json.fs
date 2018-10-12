@@ -3,7 +3,7 @@ open System
 open Newtonsoft.Json
 open Newtonsoft.Json.Serialization
 
-module JsonConvertCommands=
+module Json=
     type ShortNameSerializationBinder(type':Type)=
         let types = type'.Assembly.GetTypes() 
                     |> Array.filter(fun t -> type'.IsAssignableFrom(t))
@@ -26,14 +26,12 @@ module JsonConvertCommands=
                     types.[typeName]
                 else
                     Type.GetType(String.Format("{0}, {1}", typeName, assemblyName), true)
+    
+    module Commands=
+        let private settings = new JsonSerializerSettings()
+        settings.TypeNameHandling <- TypeNameHandling.Auto
+        settings.SerializationBinder <- ShortNameSerializationBinder(typeof<Command>)
 
-    let binder = new ShortNameSerializationBinder(typeof<Command>)
-    let settings = new JsonSerializerSettings()
-    settings.TypeNameHandling <- TypeNameHandling.Auto
-    settings.SerializationBinder <- binder
-
-    let deserialize<'T> v=
-        JsonConvert.DeserializeObject<'T>(v, settings);
-
-    let serialize obj=
-        JsonConvert.SerializeObject(obj, settings);
+        let deserialize (v)= JsonConvert.DeserializeObject<Command array>(v, settings);
+    
+        let serialize (obj:Command array)= JsonConvert.SerializeObject(obj, settings);
