@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using SomeBasicFileStoreApp.Core.Commands;
 
 namespace Web.V1.Models
@@ -12,7 +13,7 @@ namespace Web.V1.Models
                 ProductId =ProductId  
             };
         }
-
+        [Required]
         public int ProductId { get; set; }
     }
 }

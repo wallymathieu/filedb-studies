@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using SomeBasicFileStoreApp.Core;
 using SomeBasicFileStoreApp.Core.Commands;
+using Swashbuckle.AspNetCore.Filters;
 using Web.V1.Models;
 
 namespace Web.V1.Controllers
@@ -17,6 +19,7 @@ namespace Web.V1.Controllers
         private readonly IRepository _repository;
         private readonly PersistCommandsHandler _persistCommands;
 
+        /// <inheritdoc />
         public CustomersController(IRepository repository, PersistCommandsHandler persistCommands)
         {
             _repository = repository;
@@ -49,12 +52,26 @@ namespace Web.V1.Controllers
         /// <param name="body"></param>
         /// <returns></returns>
         [HttpPost]
+        [ProducesResponseType(typeof(IDictionary<string,string>),400)]
+        [SwaggerResponseExample(400, typeof(BadRequestExample))]
         public ActionResult Post([FromBody] CreateCustomer body)
         {
             var c = body.ToCommand();
             var res = c.Handle(_repository);
             _persistCommands.Handle(c);
             return res ? (ActionResult) Ok() : BadRequest();
+        }
+
+        public class BadRequestExample: IExamplesProvider
+        {
+            public object GetExamples()
+            {
+                return new Dictionary<string,string>
+                {
+                    {"lastname", "The Lastname field is required."},
+                    {"firstname", "The Firstname field is required."}
+                };
+            }
         }
     }
 }

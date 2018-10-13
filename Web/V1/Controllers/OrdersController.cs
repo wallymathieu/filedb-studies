@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using SomeBasicFileStoreApp.Core;
 using SomeBasicFileStoreApp.Core.Commands;
+using Swashbuckle.AspNetCore.Filters;
 using Web.V1.Models;
 
 namespace Web.V1.Controllers
@@ -45,6 +47,8 @@ namespace Web.V1.Controllers
         /// <param name="body"></param>
         /// <returns></returns>
         [HttpPost]
+        [ProducesResponseType(typeof(IDictionary<string,string>),400)]
+        [SwaggerResponseExample(400, typeof(AddOrderBadRequestExample))]
         public ActionResult Post([FromBody] AddOrder body)
         {
             var c = body.ToCommand(_now());
@@ -63,12 +67,38 @@ namespace Web.V1.Controllers
         /// <param name="body"></param>
         /// <returns></returns>
         [HttpPost("{id}/products")]
+        [ProducesResponseType(typeof(IDictionary<string,string>),400)]
+        [SwaggerResponseExample(400, typeof(AddProductToOrderBadRequestExample))]
         public ActionResult PostProduct(int id,[FromBody] AddProductToOrder body)
         {
             var c = body.ToCommand(id);
             var res = c.Handle(_repository);
             _persistCommands.Handle(c);
             return res ? (ActionResult) Ok() : BadRequest();
+        }
+        ///
+        public class AddProductToOrderBadRequestExample: IExamplesProvider
+        {
+            /// <inheritdoc />
+            public object GetExamples()
+            {
+                return new Dictionary<string,string>
+                {
+                    {"productId", "The ProductId field is required."},
+                };
+            }
+        }
+        ///
+        public class AddOrderBadRequestExample: IExamplesProvider
+        {
+            /// <inheritdoc />
+            public object GetExamples()
+            {
+                return new Dictionary<string,string>
+                {
+                    {"customer", "The Customer field is required."},
+                };
+            }
         }
     }
 }

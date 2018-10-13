@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SomeBasicFileStoreApp.Core;
 using SomeBasicFileStoreApp.Core.Commands;
 using SomeBasicFileStoreApp.Core.Infrastructure;
+using Swashbuckle.AspNetCore.Filters;
 using JsonAppendToFile= SomeBasicFileStoreApp.Core.Infrastructure.Json.AppendToFile;
 using ProtoAppendToFile= SomeBasicFileStoreApp.Core.Infrastructure.ProtoBuf.AppendToFile;
 using Swashbuckle.AspNetCore.Swagger;
@@ -19,7 +20,7 @@ namespace Web
     public class Startup
     {
         private SwaggerConfig _swagger;
-
+  
         class SwaggerConfig
         {
             ///
@@ -38,7 +39,8 @@ namespace Web
             ///
             public virtual void ConfigureServices(IServiceCollection services)
             {
-                services.AddSwaggerGen(options => { });
+                services.AddSwaggerExamplesFromAssemblyOf<Startup>();
+                services.AddSwaggerGen(c => { c.ExampleFilters();});
 
                 services.ConfigureSwaggerGen(options =>
                 {
@@ -93,7 +95,22 @@ namespace Web
             {
                 services.AddSingleton<IAppendBatch, ProtoAppendToFile>(c=>new ProtoAppendToFile(protoFile));
             }
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = actionContext =>
+                {
+                    var errors = actionContext.ModelState
+                        .Where(e => e.Value.Errors.Count > 0)
+                        .ToDictionary(
+                            e => e.Key.FirstLetterToLower(),
+                            e=> string.Join(", ", e.Value.Errors.Select(m=>m.ErrorMessage)));
+
+                    return new BadRequestObjectResult(errors);
+                };
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

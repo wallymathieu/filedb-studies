@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using SomeBasicFileStoreApp.Core.Commands;
 
 namespace Web.V1.Models
@@ -14,9 +15,14 @@ namespace Web.V1.Models
                 OrderDate = now
             };
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        [Required]
         public int Customer { get; set; }
-
+        /// <summary>
+        /// Order id
+        /// </summary>
         public int Id { get; set; }
     }
 }

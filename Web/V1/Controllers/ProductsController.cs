@@ -1,7 +1,10 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using SomeBasicFileStoreApp.Core;
 using SomeBasicFileStoreApp.Core.Commands;
+using Swashbuckle.AspNetCore.Filters;
 using Web.V1.Models;
 
 namespace Web.V1.Controllers
@@ -41,6 +44,7 @@ namespace Web.V1.Controllers
         {
             return _repository.GetProduct(id);
         }
+        
         /// <summary>
         /// Add product to available products
         /// </summary>
@@ -57,13 +61,26 @@ namespace Web.V1.Controllers
         /// <response code="400"></response>
         [HttpPost]
         [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
+        [ProducesResponseType(typeof(IDictionary<string,string>),400)]
+        [SwaggerResponseExample(400, typeof(BadRequestExample))]
         public ActionResult Post([FromBody] AddProduct body)
         {
             var c = body.ToCommand();
             var res = c.Handle(_repository);
             _persistCommands.Handle(c);
             return res ? (ActionResult) Ok() : BadRequest();
+        }
+
+        public class BadRequestExample: IExamplesProvider
+        {
+            public object GetExamples()
+            {
+                return new Dictionary<string,string>
+                {
+                    {"cost", "The field Cost must be between 0.1 and 1000000."},
+                    {"name", "The Name field is required."}
+                };
+            }
         }
     }
 }
