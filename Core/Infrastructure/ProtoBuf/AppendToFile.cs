@@ -6,7 +6,7 @@ using SomeBasicFileStoreApp.Core.Commands;
 
 namespace SomeBasicFileStoreApp.Core.Infrastructure.ProtoBuf
 {
-    public class AppendToFile : Model, IAppendBatch
+    public class AppendToFile : IAppendBatch
     {
         private readonly string _filename;
 
