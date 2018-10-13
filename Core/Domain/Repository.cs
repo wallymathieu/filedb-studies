@@ -5,53 +5,29 @@ namespace SomeBasicFileStoreApp.Core
 {
     public class Repository : IRepository
     {
-        private IDictionary<long, Customer> _customers = new ConcurrentDictionary<long, Customer>();
-        private IDictionary<long, Product> _products = new ConcurrentDictionary<long, Product>();
-        private IDictionary<long, Order> _orders = new ConcurrentDictionary<long, Order>();
+        private readonly IDictionary<long, Customer> _customers = new ConcurrentDictionary<long, Customer>();
+        private readonly IDictionary<long, Product> _products = new ConcurrentDictionary<long, Product>();
+        private readonly IDictionary<long, Order> _orders = new ConcurrentDictionary<long, Order>();
 
-        public void Save(Customer obj)
-        {
-            _customers[obj.Id] = obj;
-        }
-        public void Save(Product obj)
-        {
-            _products[obj.Id] = obj;
-        }
-        public void Save(Order obj)
-        {
-            _orders[obj.Id] = obj;
-        }
-        public IEnumerable<Customer> QueryOverCustomers()
-        {
-            return _customers.Values;
-        }
-        public IEnumerable<Order> QueryOverOrders()
-        {
-            return _orders.Values;
-        }
+        public void Save(Customer obj) => _customers[obj.Id] = obj;
 
-        public Customer GetCustomer(int v)
-        {
-            return _customers[v];
-        }
-        public IEnumerable<Product> QueryOverProducts()
-        {
-            return _products.Values;
-        }
+        public IEnumerable<Customer> GetCustomers() => _customers.Values;
 
-        public Product GetProduct(int v)
-        {
-            return _products[v];
-        }
+        public IEnumerable<Order> GetOrders() => _orders.Values;
 
-        public Order GetOrder(int v)
-        {
-            return _orders[v];
-        }
+        public IEnumerable<Product> GetProducts() => _products.Values;
 
-        public Customer GetTheCustomerOrder(int v)
-        {
-            return _customers[_orders[v].Customer];
-        }
+        public void Save(Product obj) => _products[obj.Id] = obj;
+
+        public void Save(Order obj) => _orders[obj.Id] = obj;
+
+        public bool TryGetCustomer(int customerId, out Customer customer) =>
+            _customers.TryGetValue(customerId, out customer);
+
+        public bool TryGetProduct(int productId, out Product product) =>
+            _products.TryGetValue(productId, out product);
+
+        public bool TryGetOrder(int orderId, out Order order) =>
+            _orders.TryGetValue(orderId, out order);
     }
 }

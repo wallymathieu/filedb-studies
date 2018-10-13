@@ -2,6 +2,7 @@
 open System
 open System.Collections.Generic
 open System.Threading
+open System.Threading.Tasks
 
 open SomeBasicFileStoreApp
 open GetCommands
@@ -10,23 +11,21 @@ module Helpers=
 
     let inline tee fn x = x |> fn |> ignore; x
 
-
     let unwrap commands =
         commands
             |> Array.map WithSeqenceNumber.getCommand 
             |> Array.toList 
-
 
     type FakeAppendToFile ()=
         let batches = new List<Command list>();
 
         interface IAppendBatch with
             member this.Batch(commands)=
-                batches.Add(commands)
-                Thread.Sleep(100)
+                Task.Delay(100)
+                    .ContinueWith<unit>(fun r-> batches.Add(commands))
             member this.ReadAll()=
-                Thread.Sleep(100)
-                batches |> List.concat
+                Task.Delay(100)
+                    .ContinueWith(fun r-> batches |> List.concat)
 
         member this.Batches()=
             batches.ToArray()
@@ -35,29 +34,28 @@ module Helpers=
     type ObjectContainer()=
         let _fakeAppendToFile = new FakeAppendToFile()
         let _repository = new Repository()
-        let _persistToFile = new PersistCommands(_fakeAppendToFile)
+        let _persistToFile = new CommandPersister(_fakeAppendToFile)
 
-        let handlers (): HandleCommand list=
+        let handlers (): (Command->bool) list=
             [ 
-               yield HandleCommand(fun c-> Commands.handle _repository c)
+               yield (fun c-> Command.run _repository c)
                if (_persistToFile.Started()) then
-                yield HandleCommand(fun c-> _persistToFile.Handle(c) )
+                yield (fun c-> _persistToFile.Handle(c) )
                else
                 ()
             ]
         
         member this.Boot()=
             _persistToFile.Start()
-        
+
         member this.GetRepository (): IRepository=
             _repository :> IRepository
 
         member this.Handle cs=
             let hs = handlers()
             let handle command = 
-                hs |> List.iter (fun h-> h.Invoke(command))
-
-            cs |> List.iter handle
+                hs |> List.fold (fun b h-> b && h(command)) true
+            cs |> List.fold (fun b h -> b && handle h) true
 
         member this.BatchesPersisted()=
             _fakeAppendToFile.Batches()

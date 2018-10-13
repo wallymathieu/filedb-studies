@@ -17,7 +17,7 @@ type PersistToDifferentThreadTests()=
     do
         _container.Boot();
         _commandsSent <- getCommands()
-        _container.Handle(_commandsSent |> unwrap)
+        _container.Handle(_commandsSent |> unwrap) |> ignore
         (_container :> IDisposable).Dispose()
 
     [<Fact>]

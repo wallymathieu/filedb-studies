@@ -1,30 +1,29 @@
 using System.Collections.Generic;
 using SomeBasicFileStoreApp.Core.Commands;
 using System.Linq;
-using System.Threading;
 using SomeBasicFileStoreApp.Core.Infrastructure;
-using System;
+using System.Threading.Tasks;
 
 namespace SomeBasicFileStoreApp.Tests
 {
     public class FakeAppendToFile : IAppendBatch
     {
-        private readonly IList<Command[]> batches = new List<Command[]>();
-        public void Batch(IEnumerable<Command> commands)
+        private readonly IList<Command[]> _batches = new List<Command[]>();
+        public async Task Batch(IEnumerable<Command> commands)
         {
-            batches.Add(commands.ToArray());
-            Thread.Sleep(100);
+            await Task.Delay(100);
+            _batches.Add(commands.ToArray());
         }
 
         public IEnumerable<Command[]> Batches()
         {
-            return batches.ToArray();
+            return _batches.ToArray();
         }
 
-        public IEnumerable<Command> ReadAll()
+        public async Task<IEnumerable<Command>> ReadAll()
         {
-            Thread.Sleep(100);
-            return batches.SelectMany(b => b);
+            await Task.Delay(100);
+            return _batches.SelectMany(b => b);
         }
     }
 }

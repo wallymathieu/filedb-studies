@@ -7,18 +7,23 @@ namespace SomeBasicFileStoreApp.Core.Commands
     public class AddOrderCommand : Command
     {
         [ProtoMember(1)]
-        public virtual int Id { get; private set; }
+        public virtual int Id { get; set; }
         [ProtoMember(2)]
-        public virtual int Version { get; private set; }
+        public virtual int Version { get; set; }
         [ProtoMember(3)]
-        public virtual int Customer { get; private set; }
+        public virtual int Customer { get; set; }
         [ProtoMember(4)]
-        public virtual DateTime OrderDate { get; private set; }
+        public virtual DateTime OrderDate { get; set; }
        
-        public override void Handle(IRepository _repository)
+        public override bool Run(IRepository repository)
         {
-            var command = this;
-            _repository.Save(new Order(command.Id, command.Customer, command.OrderDate, new Product[0], command.Version));
+            if (repository.TryGetCustomer(Customer, out var customer)
+                && !repository.TryGetOrder(Id, out _))
+            {
+                repository.Save(new Order(Id, customer, OrderDate, new Product[0], Version));
+                return true;
+            }
+            return false;
         }
     }
 }

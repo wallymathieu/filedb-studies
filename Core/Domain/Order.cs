@@ -5,7 +5,7 @@ namespace SomeBasicFileStoreApp.Core
 {
     public class Order
     {
-        public Order(int id, int customer, DateTime orderDate, IEnumerable<Product> products, int version)
+        public Order(int id, Customer customer, DateTime orderDate, IEnumerable<Product> products, int version)
         {
             Id = id;
             Customer = customer;
@@ -13,14 +13,14 @@ namespace SomeBasicFileStoreApp.Core
             Products = products;
             Version = version;
         }
-        public virtual int Id { get; private set; }
+        public int Id { get; }
 
-        public virtual int Customer { get; private set; }
+        public Customer Customer { get; }
 
-        public virtual DateTime OrderDate { get; private set; }
+        public DateTime OrderDate { get; }
 
-        public virtual IEnumerable<Product> Products { get; private set; }
+        public IEnumerable<Product> Products { get; }
 
-        public virtual int Version { get; private set; }
+        public int Version { get; }
     }
 }

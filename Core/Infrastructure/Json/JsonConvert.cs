@@ -3,31 +3,34 @@ using SomeBasicFileStoreApp.Core.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
+using Newtonsoft.Json.Serialization;
 
 namespace SomeBasicFileStoreApp.Core.Infrastructure.Json
 {
     public class JsonConvertCommands
     {
-        private SerializationBinder _binder;
+        private readonly JsonSerializerSettings _settings;
+
         public JsonConvertCommands()
         {
-            _binder = new ShortNameSerializationBinder(typeof(Command));
+            _settings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Auto, 
+                SerializationBinder = new ShortNameSerializationBinder(typeof(Command))
+            };
         }
 
         public T Deserialize<T>(string val)
         {
-            JsonSerializerSettings settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto, Binder = _binder };
-            return JsonConvert.DeserializeObject<T>(val, settings);
+
+            return JsonConvert.DeserializeObject<T>(val, _settings);
         }
         public string Serialize<T>(T obj)
         {
-            JsonSerializerSettings settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto, Binder = _binder };
-            return JsonConvert.SerializeObject(obj, settings);
+            return JsonConvert.SerializeObject(obj, _settings);
         }
-        public class ShortNameSerializationBinder : SerializationBinder
+
+        private class ShortNameSerializationBinder : ISerializationBinder
         {
             private readonly Type _type;
             private readonly IDictionary<string, Type> _types;
@@ -40,7 +43,7 @@ namespace SomeBasicFileStoreApp.Core.Infrastructure.Json
                     .ToDictionary(t => t.Name, t => t);
             }
 
-            public override void BindToName(Type serializedType, out string assemblyName, out string typeName)
+            public void BindToName(Type serializedType, out string assemblyName, out string typeName)
             {
                 if (_type.IsAssignableFrom(serializedType))
                 {
@@ -54,7 +57,7 @@ namespace SomeBasicFileStoreApp.Core.Infrastructure.Json
                 }
             }
 
-            public override Type BindToType(string assemblyName, string typeName)
+            public Type BindToType(string assemblyName, string typeName)
             {
                 if (_types.ContainsKey(typeName))
                 {

@@ -6,10 +6,16 @@ namespace SomeBasicFileStoreApp.Core.Commands
     [ProtoInclude(1, typeof(AddCustomerCommand))]
     [ProtoInclude(2, typeof(AddProductCommand))]
     [ProtoInclude(3, typeof(AddOrderCommand))]
-    [ProtoInclude(4, typeof(AddProductToOrder))]
+    [ProtoInclude(4, typeof(AddProductToOrderCommand))]
     public abstract class Command
     {
         public long SequenceNumber { get; set; }
-        public abstract void Handle(IRepository repository);
+        
+        /// <summary>
+        /// Run command on repository, changing the repository state
+        /// </summary>
+        /// <param name="repository"></param>
+        /// <returns></returns>
+        public abstract bool Run(IRepository repository);
     }
 }
