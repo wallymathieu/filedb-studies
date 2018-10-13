@@ -37,6 +37,7 @@ let main argv =
         printfn "Usage:"
         printfn "    --ip ADDRESS   ip address (Default: %O)" defaultArgs.IP
         printfn "    --port PORT    port (Default: %i)" defaultArgs.Port
+        printfn "    --json FILE    filename"
         exit 1
 
     argv
