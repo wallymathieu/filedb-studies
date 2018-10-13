@@ -19,8 +19,8 @@ namespace Web.V1.Controllers
     {
         private readonly IRepository _repository;
         private readonly PersistCommandsHandler _persistCommands;
-        
-        public ProductsController (IRepository repository, PersistCommandsHandler persistCommands)
+
+        public ProductsController(IRepository repository, PersistCommandsHandler persistCommands)
         {
             _repository = repository;
             _persistCommands = persistCommands;
@@ -31,20 +31,17 @@ namespace Web.V1.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult<Product[]> Get()
-        {
-            return _repository.GetProducts().ToArray();
-        }
+        public ActionResult<ProductModel[]> Get() => 
+            _repository.GetProducts().Select(ProductModel.Map).ToArray();
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="id"></param>
         [HttpGet("{id}")]
-        public ActionResult<Product> Get(int id)
-        {
-            return _repository.GetProduct(id);
-        }
-        
+        public ActionResult<ProductModel> Get(int id) => 
+            ProductModel.Map(_repository.GetProduct(id));
+
         /// <summary>
         /// Add product to available products
         /// </summary>
@@ -61,21 +58,26 @@ namespace Web.V1.Controllers
         /// <response code="400"></response>
         [HttpPost]
         [ProducesResponseType(200)]
-        [ProducesResponseType(typeof(IDictionary<string,string>),400)]
+        [ProducesResponseType(typeof(IDictionary<string, string>), 400)]
         [SwaggerResponseExample(400, typeof(BadRequestExample))]
         public ActionResult Post([FromBody] AddProduct body)
         {
             var c = body.ToCommand();
-            var res = c.Handle(_repository);
-            _persistCommands.Handle(c);
-            return res ? (ActionResult) Ok() : BadRequest();
+            var res = c.Run(_repository);
+            _persistCommands.Append(c);
+            return res
+                ? (ActionResult) Ok()
+                : BadRequest(new Dictionary<string, string>
+                {
+                    {"id", "There is already an entity with the id"}
+                });
         }
 
-        public class BadRequestExample: IExamplesProvider
+        public class BadRequestExample : IExamplesProvider
         {
             public object GetExamples()
             {
-                return new Dictionary<string,string>
+                return new Dictionary<string, string>
                 {
                     {"cost", "The field Cost must be between 0.1 and 1000000."},
                     {"name", "The Name field is required."}

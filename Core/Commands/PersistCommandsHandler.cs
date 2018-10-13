@@ -70,7 +70,7 @@ namespace SomeBasicFileStoreApp.Core.Commands
             _thread?.Join();
         }
 
-        public void Handle(Command command)
+        public void Append(Command command)
         {
             // send the command to separate thread and persist it
             _commands.Enqueue(command);

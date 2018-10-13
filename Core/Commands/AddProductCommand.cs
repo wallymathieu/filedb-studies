@@ -14,7 +14,7 @@ namespace SomeBasicFileStoreApp.Core.Commands
         [ProtoMember(4)]
         public virtual string Name { get; set; }
     
-        public override bool Handle(IRepository repository)
+        public override bool Run(IRepository repository)
         {
             if (!repository.TryGetProduct(Id, out _))
             {

@@ -13,14 +13,14 @@ namespace SomeBasicFileStoreApp.Core
             Products = products;
             Version = version;
         }
-        public virtual int Id { get; }
+        public int Id { get; }
 
-        public virtual Customer Customer { get; }
+        public Customer Customer { get; }
 
-        public virtual DateTime OrderDate { get; }
+        public DateTime OrderDate { get; }
 
-        public virtual IEnumerable<Product> Products { get; }
+        public IEnumerable<Product> Products { get; }
 
-        public virtual int Version { get; }
+        public int Version { get; }
     }
 }

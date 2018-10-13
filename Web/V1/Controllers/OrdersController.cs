@@ -21,7 +21,7 @@ namespace Web.V1.Controllers
         private readonly PersistCommandsHandler _persistCommands;
         private readonly Func<DateTime> _now;
 
-        public OrdersController (IRepository repository, PersistCommandsHandler persistCommands, Func<DateTime> now)
+        public OrdersController(IRepository repository, PersistCommandsHandler persistCommands, Func<DateTime> now)
         {
             _repository = repository;
             _persistCommands = persistCommands;
@@ -29,15 +29,13 @@ namespace Web.V1.Controllers
         }
 
         [HttpGet]
-        public ActionResult<Order[]> Get()
-        {
-            return _repository.GetOrders().ToArray();
-        }
+        public ActionResult<OrderModel[]> Get() => 
+            _repository.GetOrders().Select(OrderModel.Map).ToArray();
+
         [HttpGet("{id}")]
-        public ActionResult<Order> Get(int id)
-        {
-            return _repository.GetOrder(id);
-        }
+        public ActionResult<OrderModel> Get(int id) => 
+            OrderModel.Map(_repository.GetOrder(id));
+
         /// <summary>
         /// 
         /// </summary>
@@ -47,14 +45,19 @@ namespace Web.V1.Controllers
         /// <param name="body"></param>
         /// <returns></returns>
         [HttpPost]
-        [ProducesResponseType(typeof(IDictionary<string,string>),400)]
+        [ProducesResponseType(typeof(IDictionary<string, string>), 400)]
         [SwaggerResponseExample(400, typeof(AddOrderBadRequestExample))]
         public ActionResult Post([FromBody] AddOrder body)
         {
             var c = body.ToCommand(_now());
-            var res = c.Handle(_repository);
-            _persistCommands.Handle(c);
-            return res ? (ActionResult) Ok() : BadRequest();
+            var res = c.Run(_repository);
+            _persistCommands.Append(c);
+            return res
+                ? (ActionResult) Ok()
+                : BadRequest(new Dictionary<string, string>
+                {
+                    {"id", "There is already an order with id"}
+                });
         }
 
         /// <summary>
@@ -67,34 +70,36 @@ namespace Web.V1.Controllers
         /// <param name="body"></param>
         /// <returns></returns>
         [HttpPost("{id}/products")]
-        [ProducesResponseType(typeof(IDictionary<string,string>),400)]
+        [ProducesResponseType(typeof(IDictionary<string, string>), 400)]
         [SwaggerResponseExample(400, typeof(AddProductToOrderBadRequestExample))]
-        public ActionResult PostProduct(int id,[FromBody] AddProductToOrder body)
+        public ActionResult PostProduct(int id, [FromBody] AddProductToOrder body)
         {
             var c = body.ToCommand(id);
-            var res = c.Handle(_repository);
-            _persistCommands.Handle(c);
-            return res ? (ActionResult) Ok() : BadRequest();
+            var res = c.Run(_repository);
+            _persistCommands.Append(c);
+            return res ? (ActionResult) Ok() : BadRequest(new Dictionary<string, string>());
         }
+
         ///
-        public class AddProductToOrderBadRequestExample: IExamplesProvider
+        public class AddProductToOrderBadRequestExample : IExamplesProvider
         {
             /// <inheritdoc />
             public object GetExamples()
             {
-                return new Dictionary<string,string>
+                return new Dictionary<string, string>
                 {
                     {"productId", "The ProductId field is required."},
                 };
             }
         }
+
         ///
-        public class AddOrderBadRequestExample: IExamplesProvider
+        public class AddOrderBadRequestExample : IExamplesProvider
         {
             /// <inheritdoc />
             public object GetExamples()
             {
-                return new Dictionary<string,string>
+                return new Dictionary<string, string>
                 {
                     {"customer", "The Customer field is required."},
                 };

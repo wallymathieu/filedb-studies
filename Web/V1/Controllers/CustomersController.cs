@@ -31,20 +31,17 @@ namespace Web.V1.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult<Customer[]> Get()
-        {
-            return _repository.GetCustomers().ToArray();
-        }
+        public ActionResult<CustomerModel[]> Get() => 
+            _repository.GetCustomers().Select(CustomerModel.Map).ToArray();
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public ActionResult<Customer> Get(int id)
-        {
-            return _repository.GetCustomer(id);
-        }
+        public ActionResult<CustomerModel> Get(int id) => 
+            CustomerModel.Map(_repository.GetCustomer(id));
 
         /// <summary>
         /// 
@@ -52,21 +49,26 @@ namespace Web.V1.Controllers
         /// <param name="body"></param>
         /// <returns></returns>
         [HttpPost]
-        [ProducesResponseType(typeof(IDictionary<string,string>),400)]
+        [ProducesResponseType(typeof(IDictionary<string, string>), 400)]
         [SwaggerResponseExample(400, typeof(BadRequestExample))]
         public ActionResult Post([FromBody] CreateCustomer body)
         {
             var c = body.ToCommand();
-            var res = c.Handle(_repository);
-            _persistCommands.Handle(c);
-            return res ? (ActionResult) Ok() : BadRequest();
+            var res = c.Run(_repository);
+            _persistCommands.Append(c);
+            return res
+                ? (ActionResult) Ok()
+                : BadRequest(new Dictionary<string, string>
+                {
+                    {"id", "There is already an order with id"}
+                });
         }
 
-        public class BadRequestExample: IExamplesProvider
+        public class BadRequestExample : IExamplesProvider
         {
             public object GetExamples()
             {
-                return new Dictionary<string,string>
+                return new Dictionary<string, string>
                 {
                     {"lastname", "The Lastname field is required."},
                     {"firstname", "The Firstname field is required."}

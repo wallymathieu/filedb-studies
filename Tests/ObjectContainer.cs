@@ -41,14 +41,14 @@ namespace SomeBasicFileStoreApp.Tests
         public void PersistAll(IEnumerable<Command> commands)
         {
             foreach (var command in commands)
-                _persistToFile.Handle(command);
+                _persistToFile.Append(command);
         }
 
         public void HandleAll(IEnumerable<Command> commands)
         {
             foreach (var command in commands)
             {
-                var r = command.Handle(_repository);
+                var r = command.Run(_repository);
                 if (!r) throw new Exception("Could not handle "+JsonConvert.SerializeObject(command));
             }
         }

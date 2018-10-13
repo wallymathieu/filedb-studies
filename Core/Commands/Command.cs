@@ -10,6 +10,12 @@ namespace SomeBasicFileStoreApp.Core.Commands
     public abstract class Command
     {
         public long SequenceNumber { get; set; }
-        public abstract bool Handle(IRepository repository);
+        
+        /// <summary>
+        /// Run command on repository, changing the repository state
+        /// </summary>
+        /// <param name="repository"></param>
+        /// <returns></returns>
+        public abstract bool Run(IRepository repository);
     }
 }

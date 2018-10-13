@@ -143,7 +143,7 @@ namespace Web
                             if (commands!=null)
                                 foreach (var command in commands)
                                 {
-                                    command.Handle(repository);
+                                    command.Run(repository);
                                 }
                         }
                     });

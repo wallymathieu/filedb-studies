@@ -16,7 +16,7 @@ namespace SomeBasicFileStoreApp.Core.Commands
         [ProtoMember(2)]
         public int ProductId { get; set; }
 
-        public override bool Handle(IRepository repository)
+        public override bool Run(IRepository repository)
         {
             if (!repository.TryGetOrder(OrderId, out var order) 
                 || !repository.TryGetProduct(ProductId, out var product)) return false;

@@ -15,7 +15,7 @@ namespace SomeBasicFileStoreApp.Core.Commands
         [ProtoMember(4)]
         public virtual DateTime OrderDate { get; set; }
        
-        public override bool Handle(IRepository repository)
+        public override bool Run(IRepository repository)
         {
             if (repository.TryGetCustomer(Customer, out var customer)
                 && !repository.TryGetOrder(Id, out _))

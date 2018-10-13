@@ -10,12 +10,12 @@
             Version = version;
         }
 
-        public virtual int Id { get; }
+        public int Id { get; }
 
-        public virtual float Cost { get; }
+        public float Cost { get; }
 
-        public virtual string Name { get; }
+        public string Name { get; }
 
-        public virtual int Version { get; }
+        public int Version { get; }
     }
 }

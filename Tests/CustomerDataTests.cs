@@ -27,7 +27,7 @@ namespace SomeBasicFileStoreApp.Tests
         [Fact]
         public void OrderHasACustomer()
         {
-            Assert.False(string.IsNullOrWhiteSpace(_repository.GetOrder(1).Customer.Firstname));
+            Assert.False(string.IsNullOrWhiteSpace(_repository.GetOrder(1).Customer.Name.First));
         }
         static CustomerDataTests()
         {

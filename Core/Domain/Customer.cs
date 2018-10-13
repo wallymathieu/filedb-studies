@@ -7,16 +7,32 @@ namespace SomeBasicFileStoreApp.Core
         public Customer(int id, string firstName, string lastName, int version)
         {
             Id = id;
-            Firstname = firstName;
-            Lastname = lastName;
+            Name=new Names(firstName,lastName);
             Version = version;
         }
 
-        public virtual int Id { get; }
-        public virtual string Firstname { get; }
+        public int Id { get; }
+        
+        public int Version { get; }
+        
+        public Names Name { get; }
+    }
 
-        public virtual string Lastname { get; }
+    public class Names
+    {
+        public Names(string first, string last)
+        {
+            First = first;
+            Last = last;
+        }
 
-        public virtual int Version { get; }
+        /// <summary>
+        /// First name
+        /// </summary>
+        public string First { get; }
+        /// <summary>
+        /// Last name
+        /// </summary>
+        public string Last { get; }
     }
 }
