@@ -16,7 +16,7 @@ type CustomerDataTests()=
     do
         //_container.Boot();
         let commands = getCommands()
-        _container.Handle(commands |> unwrap)
+        _container.Handle(commands |> unwrap) |> ignore
 
     [<Fact>]
     member this.CanGetCustomerById()=
@@ -29,7 +29,7 @@ type CustomerDataTests()=
     [<Fact>]
     member this.OrderContainsProduct()=
         let order = _repository.GetOrder(1)
-        Assert.True(order.Products |> List.tryFind( fun p -> p.Id = 1) |> Option.isSome)
+        Assert.True(order.Value.Products |> List.tryFind( fun p -> p.Id = 1) |> Option.isSome)
 
     //[<Test>]
     //member this.OrderHasACustomer()=

@@ -4,7 +4,7 @@ open System.Collections.Concurrent
 open System.Collections.Generic
 open System.Threading
 
-type PersistCommands(appendBatch:IAppendBatch)=
+type CommandPersister(appendBatch:IAppendBatch)=
     let mutable thread= null
     let stop = ref false
     let commands = new ConcurrentQueue<Command>()
@@ -50,3 +50,4 @@ type PersistCommands(appendBatch:IAppendBatch)=
         // send the command to separate thread and persist it
         commands.Enqueue(command)
         signal.Set() |> ignore
+        true

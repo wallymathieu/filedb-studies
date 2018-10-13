@@ -10,8 +10,9 @@
     <Compile Include="Commands.fs" />
     <Compile Include="Json.fs" />
     <Compile Include="AppendBatch.fs" />
-    <Compile Include="PersistCommands.fs" />
+    <Compile Include="CommandPersister.fs" />
     <Content Include="App.config" />
+    <PackageReference Include="FSharpPlus" Version="1.1.0-CI00252" />
     <PackageReference Include="FSharpx.Extras" Version="2.2.1" />
     <PackageReference Include="FSharp.Core" Version="4.3.4" />
     <PackageReference Include="Newtonsoft.Json" Version="11.*" />

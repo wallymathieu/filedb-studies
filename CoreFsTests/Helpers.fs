@@ -34,13 +34,13 @@ module Helpers=
     type ObjectContainer()=
         let _fakeAppendToFile = new FakeAppendToFile()
         let _repository = new Repository()
-        let _persistToFile = new PersistCommands(_fakeAppendToFile)
+        let _persistToFile = new CommandPersister(_fakeAppendToFile)
 
-        let handlers (): HandleCommand list=
+        let handlers (): (Command->bool) list=
             [ 
-               yield HandleCommand(fun c-> Commands.handle _repository c)
+               yield (fun c-> Command.run _repository c)
                if (_persistToFile.Started()) then
-                yield HandleCommand(fun c-> _persistToFile.Handle(c) )
+                yield (fun c-> _persistToFile.Handle(c) )
                else
                 ()
             ]
@@ -54,8 +54,8 @@ module Helpers=
         member this.Handle cs=
             let hs = handlers()
             let handle command = 
-                hs |> List.iter (fun h-> h.Invoke(command))
-            cs |> List.iter handle
+                hs |> List.fold (fun b h-> b && h(command)) true
+            cs |> List.fold (fun b h -> b && handle h) true
 
         member this.BatchesPersisted()=
             _fakeAppendToFile.Batches()

@@ -13,6 +13,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CoreFsTests", "CoreFsTests\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "Web\Web.csproj", "{7DA5BF37-1EF5-4747-A3C4-825FF85BDCEB}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "WebFs", "WebFs\WebFs.fsproj", "{189F1C43-CDC2-4F5A-9CAE-C8C6F80C61AE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{7DA5BF37-1EF5-4747-A3C4-825FF85BDCEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7DA5BF37-1EF5-4747-A3C4-825FF85BDCEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7DA5BF37-1EF5-4747-A3C4-825FF85BDCEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{189F1C43-CDC2-4F5A-9CAE-C8C6F80C61AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{189F1C43-CDC2-4F5A-9CAE-C8C6F80C61AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{189F1C43-CDC2-4F5A-9CAE-C8C6F80C61AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{189F1C43-CDC2-4F5A-9CAE-C8C6F80C61AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

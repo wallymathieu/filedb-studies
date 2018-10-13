@@ -1,6 +1,6 @@
 ﻿namespace SomeBasicFileStoreApp
 open System
-
+open FSharpPlus
 
 type Command = 
     | Empty
@@ -9,8 +9,8 @@ type Command =
     | AddProductCommand of id:int * version:int * name:string * cost:decimal
     | AddProductToOrder of orderId:int * productId:int
 
-module Commands=
-    let handle (repository:IRepository) command=
+module Command=
+    let run (repository:IRepository) command=
         match command with
             | AddCustomerCommand(id=id ;version=version; firstName=firstName; lastName=lastName) -> 
                 repository.Save(Entity.Customer({
@@ -19,14 +19,19 @@ module Commands=
                                                 LastName=lastName
                                                 Version=version
                                                 }))
+                true
             | AddOrderCommand(id=id; version=version; customer=customer; orderDate=orderDate)-> 
-                repository.Save(Entity.Order({
-                                               Id=id
-                                               OrderDate=orderDate
-                                               Version=version
-                                               Customer= repository.GetCustomer(customer)
-                                               Products=List.empty
-                                             }))
+                match repository.GetCustomer(customer) with
+                | Some customer->                  
+                  repository.Save(Entity.Order({
+                                             Id=id
+                                             OrderDate=orderDate
+                                             Version=version
+                                             Customer=customer 
+                                             Products=List.empty
+                                           }))
+                  true
+                | None -> false
             | AddProductCommand(id=id; version=version; name=name; cost=cost)-> 
                 repository.Save(Entity.Product({
                                                 Id=id
@@ -34,12 +39,15 @@ module Commands=
                                                 Cost=cost
                                                 Name=name
                                                }))
+                true
             | AddProductToOrder(orderId=orderId; productId=productId)->
                 let order = repository.GetOrder(orderId)
                 let product = repository.GetProduct(productId)
-                repository.Save(Entity.Order({order with Products= product :: order.Products}))
-            | Empty -> ()
+                match order,product with
+                | Some order, Some product ->
+                    repository.Save(Entity.Order({order with Products= product :: order.Products}))
+                    true
+                | _, _ -> false
+            | Empty -> false
 
-
-type HandleCommand = delegate of Command -> unit
 
