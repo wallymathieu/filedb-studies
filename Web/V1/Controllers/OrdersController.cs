@@ -33,8 +33,12 @@ namespace Web.V1.Controllers
             _repository.GetOrders().Select(OrderModel.Map).ToArray();
 
         [HttpGet("{id}")]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(typeof(OrderModel),200)]
         public ActionResult<OrderModel> Get(int id) => 
-            OrderModel.Map(_repository.GetOrder(id));
+            _repository.TryGetOrder(id, out var o)
+                ? new ActionResult<OrderModel>(OrderModel.Map(o))
+                : NotFound();
 
         /// <summary>
         /// 

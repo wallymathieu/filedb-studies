@@ -40,8 +40,12 @@ namespace Web.V1.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(typeof(CustomerModel),200)]
         public ActionResult<CustomerModel> Get(int id) => 
-            CustomerModel.Map(_repository.GetCustomer(id));
+            _repository.TryGetCustomer(id, out var c)
+                ?new ActionResult<CustomerModel>(CustomerModel.Map(c))
+                :NotFound();
 
         /// <summary>
         /// 

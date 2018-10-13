@@ -39,8 +39,12 @@ namespace Web.V1.Controllers
         /// </summary>
         /// <param name="id"></param>
         [HttpGet("{id}")]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(typeof(ProductModel),200)]
         public ActionResult<ProductModel> Get(int id) => 
-            ProductModel.Map(_repository.GetProduct(id));
+            _repository.TryGetProduct(id, out var p)
+                ?new ActionResult<ProductModel>(ProductModel.Map(p))
+                :NotFound();
 
         /// <summary>
         /// Add product to available products
