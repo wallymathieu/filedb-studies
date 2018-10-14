@@ -7,10 +7,6 @@ type ThreadSafeMax<'t when 't :comparison>(initial:'t) =
     /// get the current maximum
     member __.Value with get ()= maximum
     /// observe a value, store the value if it's greater than the current value
-    member __.Observe value =lock monitor (fun ()-> maximum <- max maximum value)
-[<RequireQualifiedAccess>]
-module ThreadSafeMax=
-    let value (t:ThreadSafeMax<_>) = t.Value
-    let observe maybeNext (t:ThreadSafeMax<_>) = 
-        t.Observe maybeNext
-        maybeNext
+    member __.Observe value =
+        lock monitor (fun ()-> maximum <- max maximum value)
+        value
