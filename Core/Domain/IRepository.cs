@@ -13,5 +13,8 @@ namespace SomeBasicFileStoreApp.Core
         IEnumerable<Customer> GetCustomers();
         IEnumerable<Order> GetOrders();
         IEnumerable<Product> GetProducts();
+        int NextCustomerId();
+        int NextOrderId();
+        int NextProductId();
     }
 }

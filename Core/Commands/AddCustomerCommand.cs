@@ -19,12 +19,13 @@ namespace SomeBasicFileStoreApp.Core.Commands
 
         public override bool Run(IRepository repository)
         {
-            if (!repository.TryGetCustomer(Id, out _))
-            {
-                repository.Save(new Customer(Id, Firstname, Lastname, Version));
-                return true;
-            }
-            return false;
+            if (Id > 0 && repository.TryGetCustomer(Id, out _)) return false;
+            repository.Save(new Customer(
+                firstName: Firstname, lastName: Lastname,version: Version, 
+                id:Id<=0
+                    ?repository.NextCustomerId()
+                    :Id));
+            return true;
         }
     }
 }

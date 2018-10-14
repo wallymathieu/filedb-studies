@@ -53,7 +53,7 @@ namespace Web.V1.Controllers
         /// You could for instance add products using
         /// ```JSON
         /// {
-        ///   "id":"12", "cost":124, "name": "tea"
+        ///   "cost":124, "name": "tea"
         /// }
         /// ```
         /// </remarks>
@@ -71,10 +71,7 @@ namespace Web.V1.Controllers
             _persistCommands.Append(c);
             return res
                 ? (ActionResult) Ok()
-                : BadRequest(new Dictionary<string, string>
-                {
-                    {"id", "There is already an entity with the id"}
-                });
+                : BadRequest(new Dictionary<string, string>());
         }
 
         public class BadRequestExample : IExamplesProvider

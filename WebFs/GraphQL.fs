@@ -47,13 +47,25 @@ let query (r:IRepository)=
             [ Define.Input("id", String) ],
             fun ctx () -> ctx.Arg("id") |> r.GetOrder)
         Define.Field(
+            "orders", ListOf OrderType, "Get all orders",
+            [ ],
+            fun ctx () -> r.GetOrders())
+        Define.Field(
             "product", Nullable ProductType, "Gets product",
             [ Define.Input("id", String) ],
             fun ctx () -> ctx.Arg("id") |> r.GetProduct)
         Define.Field(
+            "products", ListOf ProductType, "Get all products",
+            [ ],
+            fun ctx () -> r.GetProducts())
+        Define.Field(
             "customer", Nullable CustomerType, "Gets product",
             [ Define.Input("id", String) ],
             fun ctx () -> ctx.Arg("id") |> r.GetCustomer)
+        Define.Field(
+            "customers", ListOf CustomerType, "Get all customers",
+            [ ],
+            fun ctx () -> r.GetCustomers())
       ])
 
 let mutation (handle:(Command->bool)) (now:unit->DateTime)=
@@ -61,20 +73,20 @@ let mutation (handle:(Command->bool)) (now:unit->DateTime)=
     "Mutation", [
         Define.Field(
             "addCustomer", Boolean, "Add customer. Returns true if successful",
-            [ Define.Input("id", String); Define.Input("firstname", String); Define.Input("lastname", String)],
+            [ Define.Input("firstname", String); Define.Input("lastname", String)],
             fun ctx () -> 
-                handle <| AddCustomerCommand ((ctx.Arg "id"), 0, (ctx.Arg "firstname"), (ctx.Arg "lastname")))
+                handle <| AddCustomerCommand (0, 0, (ctx.Arg "firstname"), (ctx.Arg "lastname")))
         Define.Field(
             "addProduct", Boolean, "Add product. Returns true if successful",
-            [ Define.Input("id", String); Define.Input("name", String); Define.Input("cost", Float) ],
+            [ Define.Input("name", String); Define.Input("cost", Float) ],
             fun ctx () ->
                 let cost=ctx.Arg "cost" |> decimal
-                handle <| AddProductCommand ((ctx.Arg "id"), 0, (ctx.Arg "name"), cost))
+                handle <| AddProductCommand (0, 0, (ctx.Arg "name"), cost))
         Define.Field(
             "addOrder", Boolean, "Add order. Returns true if successful",
-            [ Define.Input("id", String); Define.Input("customer", Int); ],
+            [ Define.Input("customer", Int); ],
             fun ctx () ->
-                handle <| AddOrderCommand ((ctx.Arg "id"), 0, (ctx.Arg "customer"), now()))
+                handle <| AddOrderCommand (0, 0, (ctx.Arg "customer"), now()))
         Define.Field(
             "addProductToOrder", Boolean, "Add product. Returns true if successful",
             [ Define.Input("orderId", Int); Define.Input("productId", Int) ],
