@@ -58,10 +58,7 @@ namespace Web.V1.Controllers
             _persistCommands.Append(c);
             return res
                 ? (ActionResult) Ok()
-                : BadRequest(new Dictionary<string, string>
-                {
-                    {"id", "There is already an order with id"}
-                });
+                : BadRequest(new Dictionary<string, string>());
         }
 
         /// <summary>

@@ -12,16 +12,12 @@ namespace Web.V1.Models
         {
             return new AddProductCommand
             {
-                Id = Id,
+                Id = 0,
                 Name= Name,
                 Cost=Cost
             };
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public int Id { get; set; }
         /// <summary>
         /// 
         /// </summary>

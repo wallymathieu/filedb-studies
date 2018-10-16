@@ -9,8 +9,8 @@ namespace Web.V1.Models
         {
             return new AddCustomerCommand()
             {
-                Id = Id,
-                Firstname = Firstname ,
+                Id = 0,
+                Firstname = Firstname,
                 Lastname =Lastname 
             };
         }
@@ -26,7 +26,5 @@ namespace Web.V1.Models
         [StringLength(60, MinimumLength = 3)]
         [Required]
         public string Firstname { get; set; }
-
-        public int Id { get; set; }
     }
 }

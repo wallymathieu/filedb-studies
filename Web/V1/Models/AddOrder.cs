@@ -10,7 +10,7 @@ namespace Web.V1.Models
         {
             return new AddOrderCommand()
             {
-                Id = Id,
+                Id = 0,
                 Customer=Customer,
                 OrderDate = now
             };
@@ -20,9 +20,5 @@ namespace Web.V1.Models
         /// </summary>
         [Required]
         public int Customer { get; set; }
-        /// <summary>
-        /// Order id
-        /// </summary>
-        public int Id { get; set; }
     }
 }
