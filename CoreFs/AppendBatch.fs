@@ -1,7 +1,7 @@
 ﻿namespace SomeBasicFileStoreApp
 open System
 open System.Threading.Tasks
-open FSharpx.Task
+open FSharp.Control.Tasks.V2
 
 type IAppendBatch=
     abstract member Batch: Command list->Task<unit>
