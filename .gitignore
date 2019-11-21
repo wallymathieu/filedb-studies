@@ -67,3 +67,4 @@ packages/
 
 # Test result
 TestResults.xml
+.ionide/
