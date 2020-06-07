@@ -28,9 +28,9 @@ module Json=
                     Type.GetType(String.Format("{0}, {1}", typeName, assemblyName), true)
     
     module Commands=
-        let private settings = new JsonSerializerSettings()
-        settings.TypeNameHandling <- TypeNameHandling.Auto
-        settings.SerializationBinder <- ShortNameSerializationBinder(typeof<Command>)
+        let private settings = JsonSerializerSettings(
+                                  TypeNameHandling = TypeNameHandling.Auto,
+                                  SerializationBinder = ShortNameSerializationBinder(typeof<Command>))
 
         let deserialize (v)= JsonConvert.DeserializeObject<Command array>(v, settings);
     
