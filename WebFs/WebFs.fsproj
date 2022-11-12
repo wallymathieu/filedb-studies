@@ -1,23 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <OutputType>Exe</OutputType>
-        <TargetFramework>netcoreapp2.1</TargetFramework>
-    </PropertyGroup>
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+    <TargetFramework>net6</TargetFramework>
 
-    <ItemGroup>
-        <Compile Include="GraphQL.fs" />
-        <Compile Include="Web.fs" />
-        <Compile Include="Program.fs" />
-    </ItemGroup>
+  </PropertyGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\CoreFs\CoreFs.fsproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <Compile Include="GraphQL.fs" />
+    <Compile Include="Web.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
 
-    <ItemGroup>
-      <PackageReference Include="FSharp.Data.GraphQL.Server" Version="0.0.7-beta" />
-      <PackageReference Include="Suave" Version="2.5.2" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CoreFs\CoreFs.fsproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FSharp.Data.GraphQL.Server" Version="0.0.7-beta" />
+    <PackageReference Include="Suave" Version="2.5.2" />
+  </ItemGroup>
 
 </Project>

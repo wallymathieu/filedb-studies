@@ -7,13 +7,14 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using SomeBasicFileStoreApp.Core;
 using SomeBasicFileStoreApp.Core.Commands;
 using SomeBasicFileStoreApp.Core.Infrastructure;
 using Swashbuckle.AspNetCore.Filters;
 using JsonAppendToFile= SomeBasicFileStoreApp.Core.Infrastructure.Json.AppendToFile;
 using ProtoAppendToFile= SomeBasicFileStoreApp.Core.Infrastructure.ProtoBuf.AppendToFile;
-using Swashbuckle.AspNetCore.Swagger;
 
 namespace Web
 {
@@ -24,7 +25,7 @@ namespace Web
         class SwaggerConfig
         {
             ///
-            public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+            public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
             {
                 // Enable middleware to serve generated Swagger as a JSON endpoint
                 app.UseSwagger(c => { c.RouteTemplate = "swagger/{documentName}/swagger.json"; });
@@ -49,14 +50,13 @@ namespace Web
                         (webAssembly.GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute))
                             as AssemblyInformationalVersionAttribute[])?.First()?.InformationalVersion;
 
-                    options.SwaggerDoc("v1", new Info
+                    options.SwaggerDoc("v1", new OpenApiInfo
                     {
                         Version = informationalVersion ?? "dev",
                         Title = "API",
                         Description = "Some API",
-                        TermsOfService = "See license agreement",
-                        Contact = new Contact
-                            {Name = "Dev", Email = "developers@somecompany.com", Url = "https://somecompany.com"}
+                        Contact = new OpenApiContact
+                            {Name = "Dev", Email = "developers@somecompany.com", Url = new Uri("https://somecompany.com")}
                     });
 
                     //Set the comments path for the swagger json and ui.
@@ -96,7 +96,7 @@ namespace Web
                 services.AddSingleton<IAppendBatch, ProtoAppendToFile>(c=>new ProtoAppendToFile(protoFile));
             }
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddControllers().AddApplicationPart(typeof(Startup).Assembly);
             
             services.Configure<ApiBehaviorOptions>(options =>
             {
@@ -114,7 +114,7 @@ namespace Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -128,24 +128,31 @@ namespace Web
             app.UseStaticFiles();
             _swagger.Configure(app,env);
             app.UseHttpsRedirection();
-            app.UseMvcWithDefaultRoute();
-            var lifetime= app.ApplicationServices.GetRequiredService<IApplicationLifetime>();
+            app.UseRouting();
+
+            //app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
+            var lifetime= app.ApplicationServices.GetRequiredService<IHostApplicationLifetime>();
                     lifetime.ApplicationStarted.Register(() =>
                     {
-                        using (var context = app.ApplicationServices.CreateScope())
-                        {
-                            var persist = context.ServiceProvider
-                                .GetRequiredService<PersistCommandsHandler>();
-                            persist.Start();
-                            var repository = context.ServiceProvider
-                                .GetRequiredService<IRepository>();
-                            var commands = persist.YieldStored()?.Result;
-                            if (commands!=null)
-                                foreach (var command in commands)
-                                {
-                                    command.Run(repository);
-                                }
-                        }
+                        using var context = app.ApplicationServices.CreateScope();
+                        var persist = context.ServiceProvider
+                            .GetRequiredService<PersistCommandsHandler>();
+                        persist.Start();
+                        var repository = context.ServiceProvider
+                            .GetRequiredService<IRepository>();
+                        var commands = persist.YieldStored()?.Result;
+                        if (commands!=null)
+                            foreach (var command in commands)
+                            {
+                                command.Run(repository);
+                            }
                     });
         }
     }

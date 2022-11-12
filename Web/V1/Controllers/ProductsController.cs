@@ -74,9 +74,9 @@ namespace Web.V1.Controllers
                 : BadRequest(new Dictionary<string, string>());
         }
 
-        public class BadRequestExample : IExamplesProvider
+        public class BadRequestExample : IExamplesProvider<Dictionary<string, string>>
         {
-            public object GetExamples()
+            public Dictionary<string, string> GetExamples()
             {
                 return new Dictionary<string, string>
                 {

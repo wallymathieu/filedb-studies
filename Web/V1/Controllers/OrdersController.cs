@@ -82,10 +82,10 @@ namespace Web.V1.Controllers
         }
 
         ///
-        public class AddProductToOrderBadRequestExample : IExamplesProvider
+        public class AddProductToOrderBadRequestExample : IExamplesProvider<Dictionary<string,string>>
         {
             /// <inheritdoc />
-            public object GetExamples()
+            public Dictionary<string, string> GetExamples()
             {
                 return new Dictionary<string, string>
                 {
@@ -95,10 +95,10 @@ namespace Web.V1.Controllers
         }
 
         ///
-        public class AddOrderBadRequestExample : IExamplesProvider
+        public class AddOrderBadRequestExample : IExamplesProvider<Dictionary<string,string>>
         {
             /// <inheritdoc />
-            public object GetExamples()
+            public Dictionary<string, string> GetExamples()
             {
                 return new Dictionary<string, string>
                 {
