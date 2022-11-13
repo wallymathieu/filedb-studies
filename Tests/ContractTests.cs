@@ -71,7 +71,7 @@ public class ApiFixture:IDisposable
             .UseKestrel()
             .UseContentRoot(Directory.GetCurrentDirectory())
             .UseConfiguration(configuration)
-            .UseStartup<TestStartup>()) { AllowSynchronousIO=true };
+            .UseStartup<TestStartup>());
     }
     private readonly TestServer _testServer;
     private readonly string _tempFileName;

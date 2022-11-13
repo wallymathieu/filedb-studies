@@ -1,5 +1,4 @@
 ﻿namespace SomeBasicFileStoreApp
-open System
 open System.Threading.Tasks
 open FSharp.Control.Tasks.V2
 
@@ -24,11 +23,11 @@ type JsonAppendToFile(fileName)=
             seq{
                 let line=ref ""
                 let readLine ()=
-                    line := r.ReadLine()
-                    !line
+                    line.Value <- r.ReadLine()
+                    line.Value
 
                 while (null <> readLine()) do
-                    yield deserialize(!line)
+                    yield deserialize(line.Value)
             }
             |> Seq.concat
             |> Seq.toList

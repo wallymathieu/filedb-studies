@@ -22,7 +22,7 @@ namespace SomeBasicFileStoreApp.Tests
         [Fact]
         public void OrderContainsProduct()
         {
-            Assert.True(_repository.GetOrder(1).Products.Any(p => p.Id == 1));
+            Assert.Contains(_repository.GetOrder(1).Products, p => p.Id == 1);
         }
         [Fact]
         public void OrderHasACustomer()

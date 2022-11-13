@@ -1,8 +1,6 @@
 ﻿namespace SomeBasicFileStoreApp
 open System
-open FSharp.Control
 open FSharpPlus
-open FSharpPlus.Operators
 open CoreFs.Threading
 
 type Customer = {Id:int; FirstName:string ; LastName:string; Version:int}
@@ -42,7 +40,7 @@ type Repository()=
     let customerId = ThreadSafeMax 0
     let products = new ConcurrentDictionary<int, Product>()
     let productId = ThreadSafeMax 0
-    let orders = new ConcurrentDictionary<int, Order>()
+    let orders = ConcurrentDictionary<int, Order>()
     let orderId = ThreadSafeMax 0
     
     interface IRepository with
@@ -55,8 +53,8 @@ type Repository()=
         member this.NextCustomerId ()= 1+customerId.Value
         member this.NextProductId ()= 1+productId.Value
         member this.NextOrderId ()= 1+orderId.Value
-        member this.Save (c:Customer) = customers.[customerId.Observe c.Id] <- c
-        member this.Save (o:Order) = orders.[orderId.Observe o.Id] <- o
-        member this.Save (p:Product) = products.[productId.Observe p.Id] <- p
+        member this.Save (c:Customer) = customers[customerId.Observe c.Id] <- c
+        member this.Save (o:Order) = orders[orderId.Observe o.Id] <- o
+        member this.Save (p:Product) = products[productId.Observe p.Id] <- p
 
  

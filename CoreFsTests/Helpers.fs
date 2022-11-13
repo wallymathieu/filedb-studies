@@ -1,7 +1,6 @@
 ﻿namespace CoreFsTests
 open System
 open System.Collections.Generic
-open System.Threading
 open System.Threading.Tasks
 
 open SomeBasicFileStoreApp
@@ -17,7 +16,7 @@ module Helpers=
             |> Array.toList 
 
     type FakeAppendToFile ()=
-        let batches = new List<Command list>();
+        let batches = List<Command list>();
 
         interface IAppendBatch with
             member this.Batch(commands)=
@@ -32,15 +31,15 @@ module Helpers=
 
 
     type ObjectContainer()=
-        let _fakeAppendToFile = new FakeAppendToFile()
-        let _repository = new Repository()
-        let _persistToFile = new CommandPersister(_fakeAppendToFile)
+        let _fakeAppendToFile = FakeAppendToFile()
+        let _repository = Repository()
+        let _persistToFile = CommandPersister(_fakeAppendToFile)
 
         let handlers (): (Command->bool) list=
             [ 
                yield (fun c-> Command.run _repository c)
-               if (_persistToFile.Started()) then
-                yield (fun c-> _persistToFile.Handle(c) )
+               if _persistToFile.Started() then
+                yield _persistToFile.Handle
                else
                 ()
             ]

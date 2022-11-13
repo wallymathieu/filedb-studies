@@ -11,7 +11,7 @@ open Helpers
 open GetCommands
 
 type PersistingEventsTests() = 
-    let dbs = new List<string>()
+    let dbs = List<string>()
 
     interface IDisposable with
         member this.Dispose()=

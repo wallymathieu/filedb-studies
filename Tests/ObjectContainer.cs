@@ -8,7 +8,7 @@ namespace SomeBasicFileStoreApp.Tests
 {
     internal class ObjectContainer : IDisposable
     {
-        private PersistCommandsHandler _persistToFile;
+        private readonly PersistCommandsHandler _persistToFile;
         private readonly IRepository _repository = new Repository();
         private readonly FakeAppendToFile _fakeAppendToFile;
 
