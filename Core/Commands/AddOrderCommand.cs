@@ -16,11 +16,11 @@ namespace SomeBasicFileStoreApp.Core.Commands
             if (!repository.TryGetCustomer(Customer, out var customer) ||
                 Id > 0 && repository.TryGetOrder(Id, out _)) return false;
             repository.Save(new Order(
-                customer: customer,
-                orderDate: OrderDate,
-                products: new Product[0],
-                version: Version,
-                id: Id <= 0
+                Customer: customer,
+                OrderDate: OrderDate,
+                Products: new Product[0],
+                Version: Version,
+                Id: Id <= 0
                     ? repository.NextOrderId()
                     : Id));
             return true;

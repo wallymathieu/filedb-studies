@@ -20,7 +20,7 @@ namespace SomeBasicFileStoreApp.Core.Commands
         public override bool Run(IRepository repository)
         {
             if (Id > 0 && repository.TryGetCustomer(Id, out _)) return false;
-            repository.Save(new Customer(
+            repository.Save(Customer.Create(
                 firstName: Firstname, lastName: Lastname,version: Version, 
                 id:Id<=0
                     ?repository.NextCustomerId()

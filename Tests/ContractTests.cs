@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
+using SomeBasicFileStoreApp.Core;
 using Web;
 using Xunit;
 
@@ -49,14 +51,53 @@ public class ContractTests:IClassFixture<ApiFixture>
         createProductResponse.EnsureSuccessStatusCode();
         var productsResponse = await client.GetAsync("/api/v1/products/");
         var resp = await productsResponse.Content.ReadAsStringAsync();
-        var obj = JArray.Parse(resp);
-        var id = obj[0]["id"].Value<string>();
-        Assert.NotNull(id);
-        var productResponse = await client.GetAsync("/api/v1/products/"+id);
+        var array = JArray.Parse(resp).Select(ParseProduct);
+        var withName = array.FirstOrDefault(a => a.Name == "Test");
+        Assert.NotNull(withName.Id);
+        var productResponse = await client.GetAsync("/api/v1/products/"+withName.Id);
         productResponse.EnsureSuccessStatusCode();
-        var productId = JObject.Parse(await productResponse.Content.ReadAsStringAsync())["id"].Value<string>();
-        Assert.Equal(id,productId);
+        var product = ParseProduct(JObject.Parse(await productResponse.Content.ReadAsStringAsync()));
+        Assert.Equal(withName.Id,product.Id);
+        Assert.Null(product.Properties);
     }
+    [Fact]
+    public async Task Can_save_product2_and_get_product()
+    {
+        using var client = _fixture.Server.CreateClient();
+        var createProductResponse = await client.PostAsync("/api/v1/products",
+            new StringContent(@"{
+                        ""$type"": ""product2"",
+                        ""name"": ""TestProduct2"",
+                        ""cost"": 10,
+                        ""Properties"": {
+                            ""weight"": ""0.92kg"",
+                            ""length"": ""250cm"",
+                            ""width"": ""150cm""
+                        }
+                    }", Encoding.UTF8, "application/json"));
+        createProductResponse.EnsureSuccessStatusCode();
+        var productsResponse = await client.GetAsync("/api/v1/products/");
+        var resp = await productsResponse.Content.ReadAsStringAsync();
+        var array = JArray.Parse(resp).Select(ParseProduct);
+        var withName = array.FirstOrDefault(a => a.Name == "TestProduct2");
+        Assert.NotNull(withName.Id);
+        var productResponse = await client.GetAsync("/api/v1/products/"+withName.Id);
+        productResponse.EnsureSuccessStatusCode();
+        var product = ParseProduct(JObject.Parse(await productResponse.Content.ReadAsStringAsync()));
+        Assert.Equal(withName.Id,product.Id);
+        Assert.Equivalent(new Dictionary<ProductProperty,string>
+        {
+            {ProductProperty.Weight,"0.92kg"},
+            {ProductProperty.Length,"250cm"},
+            {ProductProperty.Width,"150cm"}
+        }.ToArray(), product.Properties.ToArray());
+    }
+
+    private static (string Id, string Name, IDictionary<ProductProperty,string> Properties) ParseProduct(JToken obj) => (
+        Id: obj["id"].Value<string>(), 
+        Name: obj["name"].Value<string>(),
+        Properties: obj["properties"]?.ToObject<IDictionary<ProductProperty,string>>()
+    );
 }
 
 public class ApiFixture:IDisposable

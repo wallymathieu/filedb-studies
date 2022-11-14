@@ -5,7 +5,7 @@ using With;
 using SomeBasicFileStoreApp.Core.Infrastructure.Json;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using With.Collections;
+using WallyMathieu.Collections;
 using Xunit;
 
 namespace SomeBasicFileStoreApp.Tests.Json
