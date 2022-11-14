@@ -58,45 +58,11 @@ public class ContractTests:IClassFixture<ApiFixture>
         productResponse.EnsureSuccessStatusCode();
         var product = ParseProduct(JObject.Parse(await productResponse.Content.ReadAsStringAsync()));
         Assert.Equal(withName.Id,product.Id);
-        Assert.Null(product.Properties);
-    }
-    [Fact]
-    public async Task Can_save_product2_and_get_product()
-    {
-        using var client = _fixture.Server.CreateClient();
-        var createProductResponse = await client.PostAsync("/api/v1/products",
-            new StringContent(@"{
-                        ""$type"": ""product2"",
-                        ""name"": ""TestProduct2"",
-                        ""cost"": 10,
-                        ""Properties"": {
-                            ""weight"": ""0.92kg"",
-                            ""length"": ""250cm"",
-                            ""width"": ""150cm""
-                        }
-                    }", Encoding.UTF8, "application/json"));
-        createProductResponse.EnsureSuccessStatusCode();
-        var productsResponse = await client.GetAsync("/api/v1/products/");
-        var resp = await productsResponse.Content.ReadAsStringAsync();
-        var array = JArray.Parse(resp).Select(ParseProduct);
-        var withName = array.FirstOrDefault(a => a.Name == "TestProduct2");
-        Assert.NotNull(withName.Id);
-        var productResponse = await client.GetAsync("/api/v1/products/"+withName.Id);
-        productResponse.EnsureSuccessStatusCode();
-        var product = ParseProduct(JObject.Parse(await productResponse.Content.ReadAsStringAsync()));
-        Assert.Equal(withName.Id,product.Id);
-        Assert.Equivalent(new Dictionary<ProductProperty,string>
-        {
-            {ProductProperty.Weight,"0.92kg"},
-            {ProductProperty.Length,"250cm"},
-            {ProductProperty.Width,"150cm"}
-        }.ToArray(), product.Properties.ToArray());
     }
 
-    private static (string Id, string Name, IDictionary<ProductProperty,string> Properties) ParseProduct(JToken obj) => (
+    private static (string Id, string Name) ParseProduct(JToken obj) => (
         Id: obj["id"].Value<string>(), 
-        Name: obj["name"].Value<string>(),
-        Properties: obj["properties"]?.ToObject<IDictionary<ProductProperty,string>>()
+        Name: obj["name"].Value<string>()
     );
 }
 
