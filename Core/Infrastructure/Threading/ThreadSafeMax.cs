@@ -8,7 +8,7 @@ namespace SomeBasicFileStoreApp.Core.Infrastructure.Threading
     /// </summary>
     class ThreadSafeMax<T> where T : IComparable
     {
-        private readonly object _lockObject = new object();
+        private readonly object _lockObject = new();
         /// <summary>
         /// Create an instance of ThreadSafeMax 
         /// </summary>

@@ -22,7 +22,6 @@ namespace SomeBasicFileStoreApp.Core.Infrastructure.Json
 
         public T Deserialize<T>(string val)
         {
-
             return JsonConvert.DeserializeObject<T>(val, _settings);
         }
         public string Serialize<T>(T obj)

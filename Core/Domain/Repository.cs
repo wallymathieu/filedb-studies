@@ -9,9 +9,9 @@ namespace SomeBasicFileStoreApp.Core
         private readonly IDictionary<long, Customer> _customers = new ConcurrentDictionary<long, Customer>();
         private readonly IDictionary<long, Product> _products = new ConcurrentDictionary<long, Product>();
         private readonly IDictionary<long, Order> _orders = new ConcurrentDictionary<long, Order>();
-        private readonly ThreadSafeMax<int> _customerId =new ThreadSafeMax<int>(0);
-        private readonly ThreadSafeMax<int> _orderId =new ThreadSafeMax<int>(0);
-        private readonly ThreadSafeMax<int> _productId =new ThreadSafeMax<int>(0);
+        private readonly ThreadSafeMax<int> _customerId =new(0);
+        private readonly ThreadSafeMax<int> _orderId =new(0);
+        private readonly ThreadSafeMax<int> _productId =new(0);
         public IEnumerable<Customer> GetCustomers() => _customers.Values;
         public IEnumerable<Order> GetOrders() => _orders.Values;
         public IEnumerable<Product> GetProducts() => _products.Values;
