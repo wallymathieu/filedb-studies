@@ -4,7 +4,6 @@ open Xunit
 open System.IO
 open System
 open System.Collections.Generic
-open FSharpx.Task
 
 open SomeBasicFileStoreApp
 open Helpers
