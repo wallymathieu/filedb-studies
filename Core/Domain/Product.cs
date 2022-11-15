@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SomeBasicFileStoreApp.Core;
+namespace SomeBasicFileStoreApp.Core.Domain;
 
 public record Product(int Id, float Cost, string Name, int Version, IDictionary<ProductProperty,string> Properties);
 

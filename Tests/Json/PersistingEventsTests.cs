@@ -12,10 +12,10 @@ namespace SomeBasicFileStoreApp.Tests.Json
 {
     public class PersistingEventsTests:IDisposable
     {
-        private List<string> dbs = new List<string>();
+        private readonly List<string> _dbs = new();
         public void Dispose()
         {
-            foreach (var db in dbs)
+            foreach (var db in _dbs)
             {
                 File.WriteAllText(db, string.Empty);
             }
@@ -25,16 +25,16 @@ namespace SomeBasicFileStoreApp.Tests.Json
         public async Task Read_items_persisted_in_separate_batches()
         {
             var commands = new GetCommands().Get().ToArray();
-            var _persist = new AppendToFile("Json_CustomerDataTests_1.db".Tap(db => dbs.Add(db)));
+            var persist = new AppendToFile("Json_CustomerDataTests_1.db".Tap(db => _dbs.Add(db)));
             var batches = commands.BatchesOf(3).ToArray();
             // in order for the test to be valid
             Assert.True(batches.Length>2, "batches.Length>2");
             foreach (var batch in batches)
             {
-                await _persist.Batch(batch);
+                await persist.Batch(batch);
             }
 
-            var all = await _persist.ReadAll();
+            var all = await persist.ReadAll();
             Assert.Equal(all.Count(), commands.Length);
         }
 
@@ -42,9 +42,9 @@ namespace SomeBasicFileStoreApp.Tests.Json
         public async Task Read_items_persisted_in_single_batch()
         {
             var commands = new GetCommands().Get().ToArray();
-            var _persist = new AppendToFile("Json_CustomerDataTests_2.db".Tap(db => dbs.Add(db)));
-            await _persist.Batch(commands);
-            var all = await _persist.ReadAll();
+            var persist = new AppendToFile("Json_CustomerDataTests_2.db".Tap(db => _dbs.Add(db)));
+            await persist.Batch(commands);
+            var all = await persist.ReadAll();
             Assert.Equal(all.Count(), commands.Length);
         }
 
@@ -52,9 +52,9 @@ namespace SomeBasicFileStoreApp.Tests.Json
         public async Task Read_items()
         {
             var commands = new GetCommands().Get().ToArray();
-            var _persist = new AppendToFile("Json_CustomerDataTests_3.db".Tap(db => dbs.Add(db)));
-            await _persist.Batch(commands);
-            var all = await _persist.ReadAll();
+            var persist = new AppendToFile("Json_CustomerDataTests_3.db".Tap(db => _dbs.Add(db)));
+            await persist.Batch(commands);
+            var all = await persist.ReadAll();
             Assert.Equal(all.Select(c => c.GetType()).ToArray(), commands.Select(c => c.GetType()).ToArray());
         }
     }

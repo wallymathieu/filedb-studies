@@ -1,23 +1,23 @@
 using SomeBasicFileStoreApp.Core;
+using SomeBasicFileStoreApp.Core.Domain;
 
-namespace Web.V1.Models
+namespace Web.V1.Models;
+
+public class ProductModel
 {
-    public class ProductModel
+    public static ProductModel Map(Product arg)
     {
-        public static ProductModel Map(Product arg)
+        return new ProductModel
         {
-            return new ProductModel()
-            {
-                Name = arg.Name,
-                Id = arg.Id,
-                Cost = arg.Cost
-            };
-        }
-        public int Id { get; set; }
-
-        public float Cost { get; set; }
-
-        public string Name { get; set; }
-
+            Name = arg.Name,
+            Id = arg.Id,
+            Cost = arg.Cost
+        };
     }
+    public int Id { get; set; }
+
+    public float Cost { get; set; }
+
+    public string Name { get; set; }
+
 }

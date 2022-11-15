@@ -36,9 +36,9 @@ type IRepository=
 open System.Collections.Concurrent
 
 type Repository()=
-    let customers = new ConcurrentDictionary<int, Customer>()
+    let customers = ConcurrentDictionary<int, Customer>()
     let customerId = ThreadSafeMax 0
-    let products = new ConcurrentDictionary<int, Product>()
+    let products = ConcurrentDictionary<int, Product>()
     let productId = ThreadSafeMax 0
     let orders = ConcurrentDictionary<int, Order>()
     let orderId = ThreadSafeMax 0

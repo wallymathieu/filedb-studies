@@ -14,7 +14,6 @@
     <Compile Include="CommandPersister.fs" />
     <Content Include="App.config" />
     <PackageReference Include="FSharpPlus" Version="1.2.5" />
-    <PackageReference Include="TaskBuilder.fs" Version="2.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Update="FSharp.Core" Version="6.0.6" />
   </ItemGroup>

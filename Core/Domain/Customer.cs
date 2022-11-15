@@ -1,4 +1,4 @@
-﻿namespace SomeBasicFileStoreApp.Core;
+﻿namespace SomeBasicFileStoreApp.Core.Domain;
 
 public record Customer(int Id, Names Name, int Version)
 {

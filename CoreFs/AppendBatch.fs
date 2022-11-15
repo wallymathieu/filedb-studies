@@ -1,6 +1,5 @@
 ﻿namespace SomeBasicFileStoreApp
 open System.Threading.Tasks
-open FSharp.Control.Tasks.V2
 
 type IAppendBatch=
     abstract member Batch: Command list->Task<unit>
@@ -15,7 +14,7 @@ type JsonAppendToFile(fileName)=
             use fs = File.Open(fileName, FileMode.Append, FileAccess.Write, FileShare.Read)
             use w = new StreamWriter(fs)
             w.WriteLine(serialize(cs |> List.toArray))
-            do! fs.FlushAsync().ContinueWith<unit>( fun _ -> () )
+            do! fs.FlushAsync()
         }
         member this.ReadAll ()=
             use fs = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.Read)

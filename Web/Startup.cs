@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using SomeBasicFileStoreApp.Core;
 using SomeBasicFileStoreApp.Core.Commands;
+using SomeBasicFileStoreApp.Core.Domain;
 using SomeBasicFileStoreApp.Core.Infrastructure;
 using Swashbuckle.AspNetCore.Filters;
 using JsonAppendToFile = SomeBasicFileStoreApp.Core.Infrastructure.Json.AppendToFile;

@@ -4,7 +4,6 @@ open Newtonsoft.Json.Serialization
 open Suave
 open Suave.Operators
 open Newtonsoft.Json
-open FSharp.Data.GraphQL.Execution
 open FSharp.Data.GraphQL
 let settings = JsonSerializerSettings(ContractResolver= CamelCasePropertyNamesContractResolver())
 let json o = JsonConvert.SerializeObject(o, settings)

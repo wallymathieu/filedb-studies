@@ -23,7 +23,7 @@ module Json=
     
             member this.BindToType(assemblyName, typeName)=
                 if (String.IsNullOrEmpty(assemblyName) && types.ContainsKey(typeName)) then
-                    types.[typeName]
+                    types[typeName]
                 else
                     Type.GetType(String.Format("{0}, {1}", typeName, assemblyName), true)
     

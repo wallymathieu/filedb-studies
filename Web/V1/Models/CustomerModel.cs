@@ -1,4 +1,5 @@
 using SomeBasicFileStoreApp.Core;
+using SomeBasicFileStoreApp.Core.Domain;
 
 namespace Web.V1.Models
 {
