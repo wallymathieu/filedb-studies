@@ -1,7 +1,5 @@
 ﻿namespace CoreFsTests
-open System
 open System.IO
-open System.Collections.Generic
 open SomeBasicFileStoreApp
 open FSharp.Data
 type TestData = XmlProvider<"../Tests/TestData/TestData.xml", Global=false>
@@ -14,8 +12,8 @@ module GetCommands=
     let getCommands ()=
         let sequence = ref 0L
         let sequence_next ()=
-            sequence:=!sequence+1L
-            !sequence
+            sequence.Value <- sequence.Value+1L
+            sequence.Value
         let wrap c : WithSeqenceNumber=
             { SequenceNumber=sequence_next(); Command= c}
 
@@ -23,7 +21,7 @@ module GetCommands=
             wrap(AddCustomerCommand(id=o.Id,version=o.Version,firstName=o.Firstname,lastName=o.Lastname))
 
         let toAddOrder (o : TestData.Order)=
-            wrap(AddOrderCommand(id=o.Id,version=o.Version,customer=o.Customer, orderDate=o.OrderDate))
+            wrap(AddOrderCommand(id=o.Id,version=o.Version,customer=o.Customer, orderDate=o.OrderDate.Date))
 
         let toProduct (o : TestData.Product)=
             wrap( AddProductCommand(id=o.Id,version=o.Version,name=o.Name,cost=o.Cost))

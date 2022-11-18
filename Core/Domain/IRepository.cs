@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using SomeBasicFileStoreApp.Core.Domain;
 
 namespace SomeBasicFileStoreApp.Core
 {

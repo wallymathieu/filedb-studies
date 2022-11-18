@@ -1,11 +1,8 @@
 ﻿namespace CoreFsTests
 
 open Xunit
-open System.IO
 open System
-open System.Collections.Generic
 
-open SomeBasicFileStoreApp
 open Helpers
 open GetCommands
 

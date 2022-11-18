@@ -4,7 +4,6 @@ open Newtonsoft.Json.Serialization
 open Suave
 open Suave.Operators
 open Newtonsoft.Json
-open FSharp.Data.GraphQL.Execution
 open FSharp.Data.GraphQL
 let settings = JsonSerializerSettings(ContractResolver= CamelCasePropertyNamesContractResolver())
 let json o = JsonConvert.SerializeObject(o, settings)
@@ -34,7 +33,7 @@ let handleRequest schema : WebPart =
                 let serialized = json result
                 return! http |> Successful.OK serialized
             | None ->
-                let! schemaResult = Executor(schema).AsyncExecute(Introspection.introspectionQuery)
+                let! schemaResult = Executor(schema).AsyncExecute(Introspection.IntrospectionQuery)
                 return! http |> Successful.OK (json schemaResult)
         }
 let startWebServer config schema=

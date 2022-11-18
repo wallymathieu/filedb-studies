@@ -3,7 +3,6 @@ open System
 open SomeBasicFileStoreApp
 open FSharp.Data.GraphQL
 open FSharp.Data.GraphQL.Types
-open FSharp.Data.GraphQL.Execution
 
 let CustomerType =
   Define.Object<Customer>(
@@ -49,7 +48,7 @@ let query (r:IRepository)=
         Define.Field(
             "orders", ListOf OrderType, "Get all orders",
             [ ],
-            fun ctx () -> r.GetOrders())
+            fun _ -> r.GetOrders)
         Define.Field(
             "product", Nullable ProductType, "Gets product",
             [ Define.Input("id", String) ],
@@ -57,7 +56,7 @@ let query (r:IRepository)=
         Define.Field(
             "products", ListOf ProductType, "Get all products",
             [ ],
-            fun ctx () -> r.GetProducts())
+            fun _ -> r.GetProducts)
         Define.Field(
             "customer", Nullable CustomerType, "Gets product",
             [ Define.Input("id", String) ],
@@ -65,10 +64,10 @@ let query (r:IRepository)=
         Define.Field(
             "customers", ListOf CustomerType, "Get all customers",
             [ ],
-            fun ctx () -> r.GetCustomers())
+            fun _ -> r.GetCustomers)
       ])
 
-let mutation (handle:(Command->bool)) (now:unit->DateTime)=
+let mutation (handle:Command->bool) (now:unit->DateTime)=
   Define.Object(
     "Mutation", [
         Define.Field(

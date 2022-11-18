@@ -1,19 +1,18 @@
 using System.ComponentModel.DataAnnotations;
 using SomeBasicFileStoreApp.Core.Commands;
 
-namespace Web.V1.Models
+namespace Web.V1.Models;
+
+public class AddProductToOrder
 {
-    public class AddProductToOrder
+    public Command ToCommand(int orderId)
     {
-        public Command ToCommand(int orderId)
+        return new AddProductToOrderCommand()
         {
-            return new AddProductToOrderCommand()
-            {
-                OrderId = orderId,
-                ProductId =ProductId  
-            };
-        }
-        [Required]
-        public int ProductId { get; set; }
+            OrderId = orderId,
+            ProductId =ProductId  
+        };
     }
+    [Required]
+    public int ProductId { get; set; }
 }

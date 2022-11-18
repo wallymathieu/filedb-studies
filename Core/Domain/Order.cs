@@ -1,26 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using SomeBasicFileStoreApp.Core.Domain;
 
-namespace SomeBasicFileStoreApp.Core
-{
-    public class Order
-    {
-        public Order(int id, Customer customer, DateTime orderDate, IEnumerable<Product> products, int version)
-        {
-            Id = id;
-            Customer = customer;
-            OrderDate = orderDate;
-            Products = products;
-            Version = version;
-        }
-        public int Id { get; }
+namespace SomeBasicFileStoreApp.Core;
 
-        public Customer Customer { get; }
-
-        public DateTime OrderDate { get; }
-
-        public IEnumerable<Product> Products { get; }
-
-        public int Version { get; }
-    }
-}
+public record Order(int Id, Customer Customer, DateTime OrderDate, IEnumerable<Product> Products, int Version);
