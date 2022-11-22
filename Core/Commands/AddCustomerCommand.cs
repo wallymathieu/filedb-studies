@@ -4,19 +4,19 @@ using SomeBasicFileStoreApp.Core.Domain;
 namespace SomeBasicFileStoreApp.Core.Commands;
 
 [ProtoContract]
-public class AddCustomerCommand : Command
+public record AddCustomerCommand : Command
 {
     [ProtoMember(1)]
-    public virtual int Id { get; set; }
+    public virtual int Id { get; init; }
 
     [ProtoMember(2)]
-    public virtual int Version { get; set; }
+    public virtual int Version { get; init; }
 
     [ProtoMember(3)]
-    public virtual string Firstname { get; set; }
+    public virtual string Firstname { get; init; } = null!;
 
     [ProtoMember(4)]
-    public virtual string Lastname { get; set; }
+    public virtual string Lastname { get; init; } = null!;
 
     public override bool Run(IRepository repository)
     {

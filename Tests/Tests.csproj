@@ -3,6 +3,7 @@
     <RootNamespace>SomeBasicFileStoreApp.Tests</RootNamespace>
     <TargetFramework>net6</TargetFramework>
     <IsPackable>false</IsPackable>
+    <Nullable>enable</Nullable>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <ItemGroup>
@@ -13,6 +14,7 @@
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.11" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.0" />
     <PackageReference Include="WallyMathieu.Collections" Version="1.2.0" />
+    <PackageReference Include="With" Version="6.0.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

@@ -16,7 +16,7 @@ public class XmlImport
         _ns = ns;
         _xDocument = xDocument;
     }
-    private TTargetType Parse<TTargetType>(XElement target, string typeName, Action<string, PropertyInfo> onIgnore)
+    private TTargetType Parse<TTargetType>(XElement target, string typeName, Action<string, PropertyInfo>? onIgnore)
     {
         var props = typeof(TTargetType).GetProperties();
         var @object = Activator.CreateInstance(typeof(TTargetType));
@@ -34,14 +34,14 @@ public class XmlImport
                 propertyInfo.SetValue(@object, value, null);
             }
         }
-        return (TTargetType)@object;
+        return (TTargetType)@object!;
     }
 
-    public IEnumerable<T> Parse<T>(string type, Action<string, PropertyInfo> onIgnore = null)
+    public IEnumerable<T> Parse<T>(string type, Action<string, PropertyInfo>? onIgnore = null)
     {
         var db = _xDocument.Root;
 
-        var elements = db.Elements(_ns + type);
+        var elements = db!.Elements(_ns + type);
 
         return elements.Select(element => Parse<T>(element, type, onIgnore)).ToList();
     }
@@ -49,7 +49,7 @@ public class XmlImport
     {
         var ns = _ns;
         var db = _xDocument.Root;
-        var elements = db.Elements(ns + name);
+        var elements = db!.Elements(ns + name);
         return (
             from element in elements
             let f = element.Element(ns + first)

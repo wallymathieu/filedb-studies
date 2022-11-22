@@ -10,16 +10,16 @@ namespace SomeBasicFileStoreApp.Core.Commands;
 
 public class PersistCommandsHandler
 {
-    private Thread _thread;
+    private Thread? _thread;
     private bool _stop = false;
     private readonly ConcurrentQueue<Command> _commands = new();
     private readonly IEnumerable<IAppendBatch> _appendBatch;
-    private EventWaitHandle signal;
+    private readonly EventWaitHandle _signal;
 
     public PersistCommandsHandler(IEnumerable<IAppendBatch> appendBatch)
     {
         _appendBatch = appendBatch;
-        signal = new EventWaitHandle(false, EventResetMode.AutoReset);
+        _signal = new EventWaitHandle(false, EventResetMode.AutoReset);
     }
 
     public void Start()
@@ -36,7 +36,7 @@ public class PersistCommandsHandler
     {
         while (!_stop)
         {
-            signal.WaitOne();
+            _signal.WaitOne();
             AppendBatch().Wait();
         }
         // While the batch has been running, more commands might have been added
@@ -65,7 +65,7 @@ public class PersistCommandsHandler
     public void Stop()
     {
         _stop = true;
-        signal.Set();
+        _signal.Set();
 
         _thread?.Join();
     }
@@ -74,7 +74,7 @@ public class PersistCommandsHandler
     {
         // send the command to separate thread and persist it
         _commands.Enqueue(command);
-        signal.Set();
+        _signal.Set();
     }
 
     public Task<IEnumerable<Command>> YieldStored()

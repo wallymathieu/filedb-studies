@@ -2,7 +2,7 @@
 
 namespace SomeBasicFileStoreApp.Core.Domain;
 
-public record Product(int Id, float Cost, string Name, int Version, IDictionary<ProductProperty,string> Properties);
+public record Product(int Id, float Cost, string Name, int Version, IDictionary<ProductProperty,string>? Properties);
 
 public enum ProductProperty
 {

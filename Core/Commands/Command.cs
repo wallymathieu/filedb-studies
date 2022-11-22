@@ -7,9 +7,9 @@ namespace SomeBasicFileStoreApp.Core.Commands;
 [ProtoInclude(2, typeof(AddProductCommand))]
 [ProtoInclude(3, typeof(AddOrderCommand))]
 [ProtoInclude(4, typeof(AddProductToOrderCommand))]
-public abstract class Command
+public abstract record Command
 {
-    public long SequenceNumber { get; set; }
+    public long SequenceNumber { get; init; }
         
     /// <summary>
     /// Run command on repository, changing the repository state

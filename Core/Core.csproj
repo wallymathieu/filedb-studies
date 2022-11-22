@@ -2,15 +2,12 @@
   <PropertyGroup>
     <TargetFramework>net6</TargetFramework>
     <RootNamespace>SomeBasicFileStoreApp.Core</RootNamespace>
-  </PropertyGroup>
-  <PropertyGroup>
+    <Nullable>enable</Nullable>
     <ProjectGuid>{FE5250C5-0FC2-443A-91B8-F1758176937C}</ProjectGuid>
     <RootNamespace>SomeBasicFileStoreApp.Core</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="FSharp.Core" Version="7.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="With" Version="6.0.0" />
     <PackageReference Include="protobuf-net" Version="3.1.25" />
   </ItemGroup>
 </Project>

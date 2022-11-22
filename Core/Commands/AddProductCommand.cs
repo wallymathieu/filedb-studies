@@ -5,13 +5,13 @@ using SomeBasicFileStoreApp.Core.Domain;
 namespace SomeBasicFileStoreApp.Core.Commands;
 
 [ProtoContract]
-public class AddProductCommand : Command
+public record AddProductCommand : Command
 {
-    [ProtoMember(1)] public virtual int Id { get; set; }
-    [ProtoMember(2)] public virtual int Version { get; set; }
-    [ProtoMember(3)] public virtual float Cost { get; set; }
-    [ProtoMember(4)] public virtual string Name { get; set; }
-    [ProtoMember(5)] public virtual IDictionary<ProductProperty, string> Properties { get; set; }
+    [ProtoMember(1)] public virtual int Id { get; init; }
+    [ProtoMember(2)] public virtual int Version { get; init; }
+    [ProtoMember(3)] public virtual float Cost { get; init; }
+    [ProtoMember(4)] public virtual string Name { get; init; } = null!;
+    [ProtoMember(5)] public virtual IDictionary<ProductProperty, string> Properties { get; init; }
 
     public override bool Run(IRepository repository)
     {

@@ -6,12 +6,12 @@ using SomeBasicFileStoreApp.Core.Domain;
 namespace SomeBasicFileStoreApp.Core.Commands;
 
 [ProtoContract]
-public class AddProductToOrderCommand : Command
+public record AddProductToOrderCommand : Command
 {
     [ProtoMember(1)]
-    public int OrderId { get; set; }
+    public int OrderId { get; init; }
     [ProtoMember(2)]
-    public int ProductId { get; set; }
+    public int ProductId { get; init; }
 
     public override bool Run(IRepository repository)
     {
