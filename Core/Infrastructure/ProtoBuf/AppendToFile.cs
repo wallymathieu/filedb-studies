@@ -19,7 +19,7 @@ public class AppendToFile : IAppendBatch
         await fs.FlushAsync();
     }
 
-    public virtual Task<IEnumerable<Command>> ReadAll()
+    public virtual Task<IEnumerable<Command>>? ReadAll()
     {
         using var fs = File.Open(_filename, FileMode.Open, FileAccess.Read, FileShare.Read);
         return Task.FromResult(Serializer.Deserialize<IEnumerable<Command>>(fs));

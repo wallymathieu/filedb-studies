@@ -24,7 +24,7 @@ public class AppendToFile : IAppendBatch
         await fs.FlushAsync();
     }
 
-    public virtual async Task<IEnumerable<Command>> ReadAll()
+    public virtual async Task<IEnumerable<Command>>? ReadAll()
     {
         await using var fs = File.Open(_filename, FileMode.Open, FileAccess.Read, FileShare.Read);
         using var r = new StreamReader(fs);

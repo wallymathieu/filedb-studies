@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using SomeBasicFileStoreApp.Core.Infrastructure.Threading;
 
 namespace SomeBasicFileStoreApp.Core.Domain;
@@ -27,12 +28,12 @@ public class Repository : IRepository
     public void Save(Customer obj) => 
         _customers[_customerId.Observe(obj.Id)] = obj;
 
-    public bool TryGetCustomer(int customerId, out Customer customer) =>
+    public bool TryGetCustomer(int customerId, [MaybeNullWhen(false)] out Customer customer) =>
         _customers.TryGetValue(customerId, out customer);
 
-    public bool TryGetProduct(int productId, out Product product) =>
+    public bool TryGetProduct(int productId, [MaybeNullWhen(false)] out Product product) =>
         _products.TryGetValue(productId, out product);
 
-    public bool TryGetOrder(int orderId, out Order order) =>
+    public bool TryGetOrder(int orderId, [MaybeNullWhen(false)] out Order order) =>
         _orders.TryGetValue(orderId, out order);
 }

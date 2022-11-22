@@ -20,7 +20,7 @@ public class FakeAppendToFile : IAppendBatch
         return _batches.ToArray();
     }
 
-    public async Task<IEnumerable<Command>> ReadAll()
+    public async Task<IEnumerable<Command>>? ReadAll()
     {
         await Task.Delay(100);
         return _batches.SelectMany(b => b);

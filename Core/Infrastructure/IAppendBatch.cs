@@ -7,5 +7,5 @@ namespace SomeBasicFileStoreApp.Core.Infrastructure;
 public interface IAppendBatch
 {
     Task Batch(IEnumerable<Command> commands);
-    Task<IEnumerable<Command>> ReadAll();
+    Task<IEnumerable<Command>>? ReadAll();
 }

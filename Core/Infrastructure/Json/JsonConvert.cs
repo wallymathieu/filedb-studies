@@ -20,7 +20,7 @@ public class JsonConvertCommands
         };
     }
 
-    public T Deserialize<T>(string val)
+    public T? Deserialize<T>(string val)
     {
         return JsonConvert.DeserializeObject<T>(val, _settings);
     }
@@ -42,7 +42,7 @@ public class JsonConvertCommands
                 .ToDictionary(t => t.Name, t => t);
         }
 
-        public void BindToName(Type serializedType, out string assemblyName, out string typeName)
+        public void BindToName(Type serializedType, out string? assemblyName, out string? typeName)
         {
             if (_type.IsAssignableFrom(serializedType))
             {
@@ -56,14 +56,15 @@ public class JsonConvertCommands
             }
         }
 
-        public Type BindToType(string assemblyName, string typeName)
+        public Type BindToType(string? assemblyName, string typeName)
         {
             if (_types.ContainsKey(typeName))
             {
                 return _types[typeName];
             }
 
-            return Type.GetType($"{typeName}, {assemblyName}", true);
+            return Type.GetType($"{typeName}, {assemblyName}", true) 
+                   ?? throw new InvalidOperationException();
         }
     }
 }

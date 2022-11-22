@@ -11,7 +11,7 @@ namespace SomeBasicFileStoreApp.Core.Commands;
 public class PersistCommandsHandler
 {
     private Thread? _thread;
-    private bool _stop = false;
+    private bool _stop;
     private readonly ConcurrentQueue<Command> _commands = new();
     private readonly IEnumerable<IAppendBatch> _appendBatch;
     private readonly EventWaitHandle _signal;
@@ -77,7 +77,7 @@ public class PersistCommandsHandler
         _signal.Set();
     }
 
-    public Task<IEnumerable<Command>> YieldStored()
+    public Task<IEnumerable<Command>>? YieldStored()
     {
         return _appendBatch.FirstOrDefault()?.ReadAll();
     }

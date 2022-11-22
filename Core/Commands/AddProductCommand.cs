@@ -11,7 +11,7 @@ public record AddProductCommand : Command
     [ProtoMember(2)] public virtual int Version { get; init; }
     [ProtoMember(3)] public virtual float Cost { get; init; }
     [ProtoMember(4)] public virtual string Name { get; init; } = null!;
-    [ProtoMember(5)] public virtual IDictionary<ProductProperty, string> Properties { get; init; }
+    [ProtoMember(5)] public virtual IDictionary<ProductProperty, string>? Properties { get; init; }
 
     public override bool Run(IRepository repository)
     {
